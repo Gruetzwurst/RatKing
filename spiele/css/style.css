@@ -116,3 +116,16 @@ button{border:0;border-radius:16px;padding:15px 24px;font-size:18px;font-weight:
 .collectionRowTop{display:flex;align-items:center;gap:10px}.collectionRow canvas{width:64px;height:56px;flex:0 0 64px;background:#b99569;border-radius:10px}
 .collectionRow strong{display:block}.collectionRow small{display:block;color:#c7b8a3;margin-top:3px}
 .collectionBar{height:9px;margin-top:8px;background:#17130f;border-radius:99px;overflow:hidden}.collectionBar span{display:block;height:100%;background:#d8a33e;border-radius:99px}
+#openAchievements{width:100%;margin-top:8px;background:#75604a;color:#fff4de;box-shadow:0 4px 0 #493b2c}
+#achievementModal{position:absolute;inset:0;z-index:22;display:flex;align-items:center;justify-content:center;padding:14px;background:#000b;touch-action:pan-y}
+#achievementModal .achievementCard{width:min(480px,94vw);max-height:calc(100vh - 24px);overflow-y:auto;padding:22px 18px;border-radius:22px;background:#261d17;border:1px solid #755b43;box-shadow:0 20px 60px #0008;text-align:center;overscroll-behavior:contain}
+@supports (height:100dvh){#achievementModal .achievementCard{max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px)}}
+#achievementList{display:grid;gap:9px;text-align:left}
+.achievementRow{padding:10px;border:1px solid #6f5741;border-radius:14px;background:#33271f}
+.achievementRow.complete{border-color:#d8a33e;background:#3b3022}
+.achievementRowTop{display:flex;align-items:center;gap:10px}
+.achievementRowTop canvas{width:64px;height:56px;flex:0 0 64px;background:#b99569;border-radius:10px}
+.achievementRowTop strong,.achievementRowTop small{display:block}
+.achievementRowTop small{margin-top:3px;color:#c7b8a3}
+.achievementStatus{margin-top:8px;color:#f0cf82;font-size:12px;font-weight:800}
+#achievementResult{border-color:#d8a33e}

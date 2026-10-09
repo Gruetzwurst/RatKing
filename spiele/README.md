@@ -16,6 +16,10 @@ Ein browserbasiertes Sammel-und-Ausweich-Spiel. Die aktuelle Spielseite ist `Rat
 
 Im klassischen Modus gibt es täglich drei neue Aufgaben. Erfüllungen und verdiente Tagesabzeichen werden lokal im jeweiligen Browser gespeichert. Karnevalsrunden zählen nicht für die Tagesaufgaben.
 
+## Erfolge
+
+Fünf dauerhafte Langzeiterfolge zählen Fortschritt ab Einführung des Systems und schalten jeweils eine besondere Figur frei. Boosts und Ratentunnel zählen in beiden Spielmodi; Siege für die klassischen und Karnevals-Erfolge gelten nur unter den jeweils angezeigten Bedingungen. Fortschritt und Figuren werden lokal im Browser gespeichert.
+
 ## Hilfe
 
 Beim ersten Öffnen erscheint eine kurze Einführung zu Steuerung, Leckerbissen, Gefahren und Rattentunneln. Sie lässt sich schließen und später über **HILFE** im Hauptmenü erneut öffnen.

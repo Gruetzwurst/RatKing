@@ -243,7 +243,12 @@ const RAT_SKINS=[
   {id:'sugarAxolotl',name:'Zuckerschock-Hamster',description:'Rund, rosig und mit riesigen Zuckerrausch-Augen',animal:'sugarHamster',bookKey:'sweets',body:'#eaa4c4',belly:'#fff0da',ear:'#f5b2c7',nose:'#c64d83',shade:'#ac718d'},
   {id:'heroRaccoon',name:'Superhelden-Waschbär',description:'Mit Umhang, Maske und Teller-Schild',animal:'heroRaccoon',bookKey:'meals',body:'#92918b',belly:'#e1d8c8',ear:'#c5b8a5',nose:'#363636',shade:'#55534f'},
   {id:'grillLlama',name:'Wurst-Dackel',description:'Langer Dackel mit Wurstkörper und Senfstreifen',animal:'sausageDachshund',bookKey:'meat',body:'#a74932',belly:'#d46b42',ear:'#704137',nose:'#332523',shade:'#77362b'},
-  {id:'trashDragon',name:'Mülltonnen-Drache',description:'Frisst wirklich alles',animal:'trashDragon',bookKey:'allEater',body:'#538b53',belly:'#a8bd78',ear:'#78ab63',nose:'#536b42',shade:'#34583b'}
+  {id:'trashDragon',name:'Mülltonnen-Drache',description:'Frisst wirklich alles',animal:'trashDragon',bookKey:'allEater',body:'#538b53',belly:'#a8bd78',ear:'#78ab63',nose:'#536b42',shade:'#34583b'},
+  {id:'rocketSnail',name:'Raketen-Schnecke',description:'Zündet bei jedem Boost den Turbo',animal:'rocketSnail',achievementKey:'boostMaster',body:'#79c6db',belly:'#c3e8dd',ear:'#e99a7d',nose:'#ef8e71',shade:'#3d738a'},
+  {id:'deepSeaMole',name:'Tiefsee-Maulwurf im Taucheranzug',description:'Taucher aus den tiefsten Tunneln',animal:'deepSeaMole',achievementKey:'tunnelMaster',body:'#61537d',belly:'#b4a6ca',ear:'#9c79a6',nose:'#e78396',shade:'#39304f'},
+  {id:'demonRat',name:'Dämonen-Ratte',description:'Herrscherin über 50 gewonnene Runden',animal:'demonRat',achievementKey:'classicChampion',body:'#4b254d',belly:'#b34a54',ear:'#e46e72',nose:'#f05a4f',shade:'#24142d'},
+  {id:'furnitureOctopus',name:'Möbelhaus-Oktopus mit Kompass',description:'Bezwingt jeden Raum auf Schwer',animal:'furnitureOctopus',achievementKey:'hardCartographer',body:'#c16b54',belly:'#f0b879',ear:'#e9a08a',nose:'#523b68',shade:'#713f58'},
+  {id:'discoCrab',name:'Disco-Krabbe im Narrenkostüm',description:'Feiert 25 schwere Karnevalssiege',animal:'discoCrab',achievementKey:'carnivalLegend',body:'#e75077',belly:'#ffb361',ear:'#ff9aa7',nose:'#743e86',shade:'#98365d'}
 ];
 let ownedRatSkins=new Set(RAT_SKINS.filter(skin=>skin.cost===0).map(skin=>skin.id));
 let selectedRatSkin='classic';
@@ -472,6 +477,103 @@ const MAPS={
   }
 };
 const MAP_ORDER=Object.keys(MAPS).filter(id=>id!=='carnival');
+const ACHIEVEMENT_STORAGE_KEY='ratKingAchievementsV1';
+const ACHIEVEMENTS=[
+  {id:'boostMaster',title:'Turbogeladen',description:'Setze den Boost 500-mal ein.',goal:500,skinId:'rocketSnail',progress:state=>state.boostUses},
+  {id:'tunnelMaster',title:'Unterirdisch legendär',description:'Benutze 100 Ratentunnel.',goal:100,skinId:'deepSeaMole',progress:state=>state.tunnelsUsed},
+  {id:'classicChampion',title:'König der Runden',description:'Gewinne 50 klassische Runden.',goal:50,skinId:'demonRat',progress:state=>state.classicWins},
+  {id:'hardCartographer',title:'Kein Raum zu schwer',description:'Gewinne auf jeder der 10 Karten eine klassische Runde auf Schwer.',goal:MAP_ORDER.length,skinId:'furnitureOctopus',progress:state=>state.hardMapWins.length},
+  {id:'carnivalLegend',title:'Letzte Runde, großes Finale',description:'Beende 25 Karnevalsrunden auf Schwer bis zum Zeitende.',goal:25,skinId:'discoCrab',progress:state=>state.hardCarnivalFinishes}
+];
+function loadAchievementProgress(){
+  const fallback={boostUses:0,tunnelsUsed:0,classicWins:0,hardMapWins:[],hardCarnivalFinishes:0};
+  try{
+    const saved=JSON.parse(readStoredValue(ACHIEVEMENT_STORAGE_KEY)||'null');
+    if(!saved||typeof saved!=='object')return fallback;
+    const count=value=>Number.isSafeInteger(value)&&value>=0?value:0;
+    return {
+      boostUses:count(saved.boostUses),
+      tunnelsUsed:count(saved.tunnelsUsed),
+      classicWins:count(saved.classicWins),
+      hardMapWins:Array.isArray(saved.hardMapWins)?[...new Set(saved.hardMapWins.filter(id=>MAP_ORDER.includes(id)))]:[],
+      hardCarnivalFinishes:count(saved.hardCarnivalFinishes)
+    };
+  }catch(e){return fallback}
+}
+let achievementProgress=loadAchievementProgress();
+let achievementUnlocksThisRun=[];
+function saveAchievementProgress(){
+  writeStoredValue(ACHIEVEMENT_STORAGE_KEY,JSON.stringify(achievementProgress));
+}
+function getAchievementProgress(achievement){
+  return Math.min(achievement.goal,achievement.progress(achievementProgress));
+}
+function refreshAchievementUnlocks(){
+  const unlocked=[];
+  for(const achievement of ACHIEVEMENTS){
+    if(getAchievementProgress(achievement)>=achievement.goal&&!ownedRatSkins.has(achievement.skinId)){
+      ownedRatSkins.add(achievement.skinId);
+      unlocked.push(achievement.id);
+    }
+  }
+  if(unlocked.length){
+    saveRatSkinProgress();
+    const skinModal=document.getElementById('skinModal');
+    if(skinModal&&!skinModal.classList.contains('hidden'))renderRatSkinPicker();
+  }
+  return unlocked;
+}
+function recordAchievementProgress(key){
+  const achievementIds={boostUses:'boostMaster',tunnelsUsed:'tunnelMaster',classicWins:'classicChampion',hardCarnivalFinishes:'carnivalLegend'};
+  const achievement=ACHIEVEMENTS.find(entry=>entry.id===achievementIds[key]);
+  if(!achievement||achievementProgress[key]>=achievement.goal)return [];
+  achievementProgress[key]++;
+  saveAchievementProgress();
+  const newlyUnlocked=refreshAchievementUnlocks();
+  achievementUnlocksThisRun.push(...newlyUnlocked);
+  return newlyUnlocked;
+}
+function recordAchievementRound(win,reason){
+  if(gameMode==='classic'&&win){
+    recordAchievementProgress('classicWins');
+    if(difficulty==='hard'&&!achievementProgress.hardMapWins.includes(currentMap)){
+      achievementProgress.hardMapWins.push(currentMap);
+      saveAchievementProgress();
+      const newlyUnlocked=refreshAchievementUnlocks();
+      achievementUnlocksThisRun.push(...newlyUnlocked);
+    }
+  }
+  if(gameMode==='timed'&&difficulty==='hard'&&reason==='time'){
+    recordAchievementProgress('hardCarnivalFinishes');
+  }
+}
+function renderAchievements(){
+  const list=document.getElementById('achievementList');
+  if(!list)return;
+  list.replaceChildren();
+  for(const achievement of ACHIEVEMENTS){
+    const progress=getAchievementProgress(achievement);
+    const complete=progress>=achievement.goal;
+    const skin=RAT_SKINS.find(candidate=>candidate.id===achievement.skinId);
+    const row=document.createElement('article');row.className='achievementRow'+(complete?' complete':'');
+    const top=document.createElement('div');top.className='achievementRowTop';
+    const preview=document.createElement('canvas');preview.width=128;preview.height=112;
+    if(skin)drawRatPreview(preview,skin);
+    top.appendChild(preview);
+    const info=document.createElement('div');
+    const title=document.createElement('strong');title.textContent=achievement.title;info.appendChild(title);
+    const description=document.createElement('small');description.textContent=achievement.description;info.appendChild(description);
+    const reward=document.createElement('small');reward.textContent=`Belohnung: ${skin?.name||'Figur'}`;info.appendChild(reward);
+    top.appendChild(info);row.appendChild(top);
+    const status=document.createElement('div');status.className='achievementStatus';
+    status.textContent=complete?'✓ Erfolg geschafft · Figur freigeschaltet':`${progress}/${achievement.goal}`;
+    row.appendChild(status);
+    const bar=document.createElement('div');bar.className='collectionBar';
+    const fill=document.createElement('span');fill.style.width=`${progress/achievement.goal*100}%`;bar.appendChild(fill);row.appendChild(bar);
+    list.appendChild(row);
+  }
+}
+refreshAchievementUnlocks();
 const UNLOCK_KEY='ratKingUnlocks';
 
 function loadUnlocks(){
@@ -599,7 +701,11 @@ function renderRatSkinPicker(){
     const info=document.createElement('div');info.className='skinInfo';
     const name=document.createElement('strong');name.textContent=skin.name;info.appendChild(name);
     const detail=document.createElement('small');
-    if(skin.bookKey){
+    if(skin.achievementKey){
+      const achievement=ACHIEVEMENTS.find(entry=>entry.id===skin.achievementKey);
+      if(achievement)detail.textContent=`${skin.description} · ${getAchievementProgress(achievement)}/${achievement.goal}`;
+      else detail.textContent=skin.description;
+    }else if(skin.bookKey){
       const book=FOOD_BOOKS.find(entry=>entry.id===skin.bookKey);
       if(book)detail.textContent=`${skin.description} · ${book.name}: ${Math.min(foodBookCounts[book.id],book.goal)}/${book.goal}`;
       else detail.textContent=`${skin.description} · Alle vier Bücher vervollständigen`;
@@ -608,6 +714,7 @@ function renderRatSkinPicker(){
     const action=document.createElement('button');action.type='button';action.className='skinAction';
     if(selected){action.textContent='AUSGEWÄHLT';action.disabled=true}
     else if(owned){action.textContent='AUSWÄHLEN';action.classList.add('secondary')}
+    else if(skin.achievementKey){action.textContent='🔒 ERFOLG';action.disabled=true}
     else if(skin.bookKey){action.textContent='🔒 GESPERRT';action.disabled=true}
     else if(hardWins>=skin.cost)action.textContent='KAUFEN';
     else{action.textContent='🔒 GESPERRT';action.disabled=true}
@@ -641,6 +748,13 @@ function renderCollectionBook(){
     const fill=document.createElement('span');fill.style.width=`${Math.min(100,entry.count/entry.goal*100)}%`;bar.appendChild(fill);row.appendChild(bar);
     list.appendChild(row);
   }
+}
+function openAchievementModal(){
+  renderAchievements();
+  document.getElementById('achievementModal').classList.remove('hidden');
+}
+function closeAchievementModal(){
+  document.getElementById('achievementModal').classList.add('hidden');
 }
 renderMapButtons();
 renderDifficultyButtons();
@@ -779,6 +893,7 @@ function useRatHole(){
 
       // Zusätzlich bleibt die Ratte 10 Sekunden vor einem erneuten Loch-Teleport geschützt.
       rat.holeCooldown=10;
+      if(playing)recordAchievementProgress('tunnelsUsed');
       if(playing&&gameMode==='classic')dailyRunStats.ratTunnelsUsed++;
 
       // Die Katze bekommt ihren kurzen Speedboost.
@@ -870,10 +985,11 @@ function displayTime(seconds){
   if(gameMode!=='timed')return String(Math.ceil(seconds));
   const total=Math.ceil(seconds);return Math.floor(total/60)+':'+String(total%60).padStart(2,'0');
 }
-function start(){cancelAnimationFrame(raf);dailyChallengeRunDate=getLocalDateKey();ensureDailyChallengeDay(dailyChallengeRunDate);renderDailyChallenges();dailyRunStats={collected:0,sweetCount:0,score:0,usedBoost:false,ratTunnelsUsed:0};buildRoom();loadHighScore();hardWinRecorded=false;hardPointsThisRun=0;paused=false;playing=true;time=gameMode==='timed'?300:60;score=0;collected=0;comboStreak=0;comboClock=0;comboBonus=0;updateComboBadge();boost=0;catHitCooldown=0;ratFacing=1;ratSlow=0;ratFast=0;catSlow=0;catFlee=0;fartClouds=[];keys={x:0,y:0};ratHoles=[];catTunnelBoost=0;createRatHoles();spawn();scoreEl.textContent=0;document.getElementById('collected').textContent=0;timeEl.textContent=displayTime(time);document.getElementById('effect').style.display='none';document.getElementById('effect').textContent='';menu.classList.add('hidden');over.classList.add('hidden');controls.classList.remove('hidden');document.getElementById('menuBtn').classList.remove('hidden');const pauseBtn=document.getElementById('pauseBtn');pauseBtn.classList.remove('hidden');pauseBtn.textContent='PAUSE';last=performance.now();raf=requestAnimationFrame(loop)}
+function start(){cancelAnimationFrame(raf);dailyChallengeRunDate=getLocalDateKey();ensureDailyChallengeDay(dailyChallengeRunDate);renderDailyChallenges();dailyRunStats={collected:0,sweetCount:0,score:0,usedBoost:false,ratTunnelsUsed:0};achievementUnlocksThisRun=[];buildRoom();loadHighScore();hardWinRecorded=false;hardPointsThisRun=0;paused=false;playing=true;time=gameMode==='timed'?300:60;score=0;collected=0;comboStreak=0;comboClock=0;comboBonus=0;updateComboBadge();boost=0;catHitCooldown=0;ratFacing=1;ratSlow=0;ratFast=0;catSlow=0;catFlee=0;fartClouds=[];keys={x:0,y:0};ratHoles=[];catTunnelBoost=0;createRatHoles();spawn();scoreEl.textContent=0;document.getElementById('collected').textContent=0;timeEl.textContent=displayTime(time);document.getElementById('effect').style.display='none';document.getElementById('effect').textContent='';menu.classList.add('hidden');over.classList.add('hidden');controls.classList.remove('hidden');document.getElementById('menuBtn').classList.remove('hidden');const pauseBtn=document.getElementById('pauseBtn');pauseBtn.classList.remove('hidden');pauseBtn.textContent='PAUSE';last=performance.now();raf=requestAnimationFrame(loop)}
 function end(win,reason='time'){
   playing=false;paused=false;
   const dailyResult=gameMode==='classic'?recordDailyChallengeResults(dailyRunStats,dailyChallengeRunDate):null;
+  recordAchievementRound(win,reason);
   controls.classList.add('hidden');
   document.getElementById('menuBtn').classList.add('hidden');
   document.getElementById('pauseBtn').classList.add('hidden');
@@ -910,6 +1026,16 @@ function end(win,reason='time'){
     if(dailyResult?.badgeAwarded)messages.push(`🏅 Tagesabzeichen verdient! Gesamt: ${dailyChallengeState.totalBadges}`);
     challengeResult.textContent=messages.join(' · ');
     challengeResult.classList.toggle('hidden',messages.length===0);
+  }
+  const achievementResult=document.getElementById('achievementResult');
+  if(achievementResult){
+    const unlocked=[...new Set(achievementUnlocksThisRun)].map(id=>{
+      const achievement=ACHIEVEMENTS.find(entry=>entry.id===id);
+      const skin=achievement&&RAT_SKINS.find(entry=>entry.id===achievement.skinId);
+      return skin?.name;
+    }).filter(Boolean);
+    achievementResult.textContent=unlocked.length?`🏅 Erfolg geschafft! Neue Figur: ${unlocked.join(', ')}`:'';
+    achievementResult.classList.toggle('hidden',!unlocked.length);
   }
 }
 function moveEntity(e,dx,dy){
@@ -1047,6 +1173,7 @@ function drawCharacterSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving
   else if(skin.animal==='heroRaccoon')drawHeroRaccoonSprite(target,x,y,skin,direction,scale,phase,moving);
   else if(skin.animal==='sausageDachshund')drawSausageDachshundSprite(target,x,y,skin,direction,scale,phase,moving);
   else if(skin.animal==='trashDragon')drawTrashDragonSprite(target,x,y,skin,direction,scale,phase,moving);
+  else if(['rocketSnail','deepSeaMole','demonRat','furnitureOctopus','discoCrab'].includes(skin.animal))drawAchievementCreature(target,x,y,skin,direction,scale,phase,moving);
   else drawRatSprite(target,x,y,skin,direction,scale,phase,moving);
   target.restore();
 }
@@ -1133,6 +1260,41 @@ function drawTrashDragonSprite(target,x,y,skin,direction,scale,phase=0,moving=fa
   target.fillStyle='#e1c164';target.beginPath();target.moveTo(-21,-15);target.lineTo(-23,-23);target.lineTo(-17,-17);target.closePath();target.moveTo(-14,-16);target.lineTo(-11,-23);target.lineTo(-10,-15);target.closePath();target.fill();target.fillStyle='#f0d18c';target.beginPath();target.ellipse(-24,-9,4,2.3,0,0,Math.PI*2);target.fill();target.fillStyle='#22261f';target.beginPath();target.arc(-19,-12,1.4,0,Math.PI*2);target.fill();target.restore();
   // The metal bin lid and ribbed can armor connect the dragon to its reward theme.
   target.fillStyle='#687b56';target.beginPath();target.roundRect(-3,2,12,9,2);target.fill();target.fillStyle='#a4bd76';target.fillRect(-4,0,14,3);target.fillStyle='#596b50';target.fillRect(-1,4,1.5,5);target.fillRect(4,4,1.5,5);target.fillRect(8,4,1.5,5);target.fillStyle='#ded5b6';target.fillRect(-1,-1,7,1.5);target.restore();
+}
+function drawAchievementCreature(target,x,y,skin,direction,scale,phase=0,moving=false){
+  target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';target.lineCap='round';
+  if(skin.animal==='rocketSnail'){
+    target.fillStyle='#314d64';target.beginPath();target.moveTo(8,-3);target.lineTo(23,-10);target.lineTo(20,-2);target.lineTo(27,1);target.lineTo(18,3);target.lineTo(22,10);target.lineTo(8,6);target.closePath();target.fill();
+    target.fillStyle='#e64f3d';target.beginPath();target.moveTo(19,-5);target.lineTo(30,-2);target.lineTo(22,1);target.lineTo(32,5);target.lineTo(17,4);target.closePath();target.fill();
+    target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,5,18,8,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(0,3,16,7,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#d88e52';target.beginPath();target.arc(2,-7,12,0,Math.PI*2);target.fill();target.fillStyle='#edbd74';target.beginPath();target.arc(2,-8,9,0,Math.PI*2);target.fill();target.strokeStyle='#9a573e';target.lineWidth=2;target.beginPath();target.arc(4,-8,5,.4,Math.PI*1.8);target.stroke();
+    target.strokeStyle=skin.body;target.lineWidth=2;target.beginPath();target.moveTo(-10,-1);target.lineTo(-13,-9);target.moveTo(-5,-2);target.lineTo(-7,-11);target.stroke();target.fillStyle='#272534';target.beginPath();target.arc(-13,-9,2,0,Math.PI*2);target.arc(-7,-11,2,0,Math.PI*2);target.fill();target.restore();return;
+  }
+  if(skin.animal==='deepSeaMole'){
+    target.fillStyle='#46516d';target.beginPath();target.roundRect(8,-11,8,23,3);target.fill();target.fillStyle='#ed873d';target.fillRect(9,-9,6,4);target.fillStyle='#d7e5e5';target.beginPath();target.ellipse(0,3,16,11,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(0,1,14,10,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#d4a18c';target.beginPath();target.ellipse(-11,-4,7,6,0,0,Math.PI*2);target.fill();target.fillStyle=skin.shade;target.beginPath();target.ellipse(-14,-2,8,5,0,0,Math.PI*2);target.fill();target.fillStyle='#e9c8b2';target.beginPath();target.ellipse(-21,-2,4,3,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#f3c64f';target.beginPath();target.arc(-7,-8,11,Math.PI,Math.PI*2);target.lineTo(4,-3);target.lineTo(-18,-3);target.closePath();target.fill();target.strokeStyle='#fff0a8';target.lineWidth=2;target.beginPath();target.arc(-7,-7,8,Math.PI,Math.PI*2);target.stroke();target.fillStyle='#bff4ff';target.beginPath();target.arc(-10,-6,2,0,Math.PI*2);target.fill();target.arc(-4,-6,2,0,Math.PI*2);target.fill();target.restore();return;
+  }
+  if(skin.animal==='demonRat'){
+    target.strokeStyle=skin.shade;target.lineWidth=3;target.beginPath();target.moveTo(10,5);target.bezierCurveTo(23,-1,22,15,31,7);target.stroke();
+    target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,2,17,11,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(0,0,15,9,0,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.ellipse(3,5,8,4,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#e7b44e';target.beginPath();target.moveTo(-17,-8);target.quadraticCurveTo(-25,-18,-21,-23);target.quadraticCurveTo(-17,-16,-11,-12);target.closePath();target.fill();target.beginPath();target.moveTo(-7,-11);target.quadraticCurveTo(-7,-23,-1,-25);target.quadraticCurveTo(-3,-16,1,-10);target.closePath();target.fill();
+    target.fillStyle=skin.body;target.beginPath();target.ellipse(-12,-5,9,8,0,0,Math.PI*2);target.fill();target.fillStyle='#f05745';target.beginPath();target.arc(-15,-8,2,0,Math.PI*2);target.arc(-7,-8,2,0,Math.PI*2);target.fill();target.fillStyle='#f5b2a5';target.beginPath();target.arc(-21,-5,2,0,Math.PI*2);target.fill();drawTrotFeet(target,[-7,7,8],13,phase,moving,skin.shade,2.4,2);target.restore();return;
+  }
+  if(skin.animal==='furnitureOctopus'){
+    target.strokeStyle=skin.shade;target.lineWidth=4;
+    for(let i=0;i<4;i++){const x0=-10+i*6;target.beginPath();target.moveTo(x0,4);target.bezierCurveTo(x0-13,8,x0-15,18,x0-22+(i%2)*5,16);target.stroke();for(let j=0;j<3;j++){target.fillStyle='#f1d6a5';target.beginPath();target.arc(x0-6-j*4,10+j*2,1.5,0,Math.PI*2);target.fill()}}
+    target.fillStyle=skin.shade;target.beginPath();target.ellipse(0,2,16,12,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(-2,-2,14,10,0,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.ellipse(-3,5,9,5,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#fff1d2';target.beginPath();target.arc(-10,-6,4,0,Math.PI*2);target.arc(-2,-7,4,0,Math.PI*2);target.fill();target.fillStyle='#28243e';target.beginPath();target.arc(-11,-6,1.5,0,Math.PI*2);target.arc(-3,-7,1.5,0,Math.PI*2);target.fill();
+    target.strokeStyle='#f4d56c';target.lineWidth=2;target.beginPath();target.arc(12,-12,7,0,Math.PI*2);target.moveTo(12,-12);target.lineTo(17,-17);target.stroke();target.fillStyle='#f4d56c';target.beginPath();target.moveTo(17,-21);target.lineTo(14,-14);target.lineTo(21,-17);target.closePath();target.fill();
+    target.fillStyle='#8c674b';target.fillRect(3,8,11,5);target.fillStyle='#d4a56c';target.fillRect(4,9,9,3);target.restore();return;
+  }
+  target.fillStyle=skin.shade;target.strokeStyle=skin.shade;target.lineWidth=3;
+  for(let i=0;i<3;i++){const legY=3+i*4;target.beginPath();target.moveTo(5,legY);target.lineTo(14,legY+4);target.lineTo(17,legY+2);target.stroke()}
+  target.beginPath();target.ellipse(0,3,15,11,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(-1,1,13,9,0,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.ellipse(-2,6,8,4,0,0,Math.PI*2);target.fill();
+  for(const clawY of [-7,11]){target.beginPath();target.moveTo(-8,0);target.quadraticCurveTo(-16,clawY,-22,clawY-2);target.stroke();target.beginPath();target.arc(-23,clawY-2,5,0,Math.PI*2);target.fill()}
+  target.fillStyle='#fff2ca';target.beginPath();target.arc(-9,-5,3.5,0,Math.PI*2);target.arc(-2,-6,3.5,0,Math.PI*2);target.fill();target.fillStyle='#46304e';target.beginPath();target.arc(-10,-5,1.4,0,Math.PI*2);target.arc(-3,-6,1.4,0,Math.PI*2);target.fill();
+  target.fillStyle='#fff1d7';target.beginPath();target.moveTo(-9,-8);target.lineTo(-4,-19);target.lineTo(1,-8);target.closePath();target.fill();target.fillStyle='#e74d78';target.fillRect(-8,-11,7,2);target.fillStyle='#efcc4f';target.beginPath();target.arc(-4,-18,1.6,0,Math.PI*2);target.fill();target.restore();
 }
 function drawRatSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineCap='round';target.lineJoin='round';
@@ -1675,6 +1837,30 @@ function drawAnimalBoostCloud(animal){
     drawPuffCloud('#f08da7','#a94e69');
     ctx.fillStyle='#ffc2cf';ctx.beginPath();ctx.arc(-8,-7,3.5,0,Math.PI*2);ctx.arc(7,-9,3,0,Math.PI*2);ctx.fill();
     drawSparkle(-20,-13,5,'#fff1c9');drawSparkle(19,-12,6,'#ffe5a3');drawSparkle(14,12,4,'#fff6dc');
+  }else if(animal==='rocketSnail'){
+    drawPuffCloud('#e96742','#8e3442');
+    ctx.fillStyle='#ffd36a';ctx.beginPath();ctx.moveTo(-15,9);ctx.quadraticCurveTo(-11,1,-15,-5);ctx.quadraticCurveTo(-5,0,-7,9);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#fff0b0';ctx.beginPath();ctx.moveTo(-5,7);ctx.quadraticCurveTo(0,0,-2,-7);ctx.quadraticCurveTo(7,0,3,8);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#c9f2f3';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(12,-4);ctx.lineTo(22,-9);ctx.moveTo(13,3);ctx.lineTo(25,3);ctx.stroke();drawSparkle(20,-13,4,'#fff2a6');
+  }else if(animal==='deepSeaMole'){
+    drawPuffCloud('#577d9b','#344d70');
+    ctx.strokeStyle='#c5f5f0';ctx.lineWidth=1.6;
+    for(const [x,y,r] of [[-14,-9,3],[9,-11,4],[17,5,2.5],[-8,10,2]]){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke()}
+    ctx.fillStyle='#f5d76e';ctx.beginPath();ctx.arc(-17,-1,2,0,Math.PI*2);ctx.arc(3,8,1.7,0,Math.PI*2);ctx.fill();
+  }else if(animal==='demonRat'){
+    drawPuffCloud('#662d5b','#321d3d');
+    ctx.fillStyle='#ed633f';ctx.beginPath();ctx.moveTo(-18,8);ctx.quadraticCurveTo(-12,-2,-15,-10);ctx.quadraticCurveTo(-4,-3,-8,8);ctx.moveTo(7,9);ctx.quadraticCurveTo(15,-1,12,-10);ctx.quadraticCurveTo(23,-3,17,9);ctx.fill();
+    drawSparkle(-9,-9,3,'#ffce59');drawSparkle(12,-8,3,'#ffce59');ctx.fillStyle='#f6b64c';ctx.beginPath();ctx.arc(0,1,2,0,Math.PI*2);ctx.fill();
+  }else if(animal==='furnitureOctopus'){
+    drawPuffCloud('#b9855e','#72503f');
+    ctx.strokeStyle='#efd0a1';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-17,-7);ctx.lineTo(-5,-3);ctx.lineTo(2,-10);ctx.moveTo(-7,7);ctx.lineTo(1,0);ctx.lineTo(14,4);ctx.stroke();
+    ctx.fillStyle='#f4d56c';ctx.beginPath();ctx.moveTo(12,-13);ctx.lineTo(8,-4);ctx.lineTo(17,-8);ctx.closePath();ctx.fill();ctx.fillStyle='#f3e8cb';ctx.fillRect(-16,5,6,5);
+  }else if(animal==='discoCrab'){
+    drawPuffCloud('#db3976','#76285f');
+    for(const [x,y,color] of [[-15,-10,'#ffda55'],[-2,-13,'#73e2dd'],[12,-9,'#a98bff'],[18,5,'#fff0a6'],[-10,11,'#80e58b']]){
+      ctx.save();ctx.translate(x,y);ctx.rotate((x+y)*.03);ctx.fillStyle=color;ctx.fillRect(-2.3,-4,4.6,8);ctx.restore();
+    }
+    drawSparkle(-21,-4,4,'#fff2a6');drawSparkle(5,11,3,'#f4f4ff');
   }else{
     ctx.font='34px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💨',0,0);
   }
@@ -1765,6 +1951,8 @@ document.getElementById('openRatSkins').addEventListener('click',()=>{refreshCol
 document.getElementById('closeSkinModal').addEventListener('click',()=>document.getElementById('skinModal').classList.add('hidden'));
 document.getElementById('openCollections').addEventListener('click',()=>{renderCollectionBook();document.getElementById('collectionModal').classList.remove('hidden')});
 document.getElementById('closeCollections').addEventListener('click',()=>document.getElementById('collectionModal').classList.add('hidden'));
+document.getElementById('openAchievements').addEventListener('click',openAchievementModal);
+document.getElementById('closeAchievements').addEventListener('click',closeAchievementModal);
 const tutorialDialog=document.getElementById('tutorialDialog');
 function openTutorial(){
   if(!tutorialDialog.open)tutorialDialog.showModal();
@@ -1779,6 +1967,7 @@ tutorialDialog.addEventListener('close',()=>writeStoredValue(TUTORIAL_SEEN_KEY,'
 if(readStoredValue(TUTORIAL_SEEN_KEY)!=='true')openTutorial();
 function setJoy(e){const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy,max=48,d=Math.hypot(dx,dy)||1;if(d>max){dx=dx/d*max;dy=dy/d*max}knob.style.transform=`translate(${dx}px,${dy}px)`;keys.x=dx/max;keys.y=dy/max}
 joy.addEventListener('pointerdown',e=>{joyId=e.pointerId;joy.setPointerCapture(joyId);setJoy(e)});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)setJoy(e)});function resetJoy(){joyId=null;knob.style.transform='translate(0,0)';keys.x=0;keys.y=0}joy.addEventListener('pointerup',resetJoy);joy.addEventListener('pointercancel',resetJoy);function triggerBoost(){
+  if(playing&&!paused)recordAchievementProgress('boostUses');
   if(playing&&gameMode==='classic')dailyRunStats.usedBoost=true;
   boost=.65;
   // Sichtbare Pupswolke direkt hinter der Ratte – rein kosmetisch.
