@@ -20,6 +20,8 @@ Im klassischen Modus gibt es täglich drei neue Aufgaben. Erfüllungen und verdi
 
 Fünf dauerhafte Langzeiterfolge zählen Fortschritt ab Einführung des Systems und schalten jeweils eine besondere Figur frei. Boosts und Ratentunnel zählen in beiden Spielmodi; Siege für die klassischen und Karnevals-Erfolge gelten nur unter den jeweils angezeigten Bedingungen. Fortschritt und Figuren werden lokal im Browser gespeichert.
 
+Die Testversion unter `testversion_alle_tiere/` enthält dieselben Erfolge und Figuren zum Ausprobieren. Dort sind alle Figuren direkt auswählbar; der Erfolgsfortschritt wird separat von der normalen Version im Browser gespeichert.
+
 ## Hilfe
 
 Beim ersten Öffnen erscheint eine kurze Einführung zu Steuerung, Leckerbissen, Gefahren und Rattentunneln. Sie lässt sich schließen und später über **HILFE** im Hauptmenü erneut öffnen.
