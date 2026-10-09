@@ -14,6 +14,7 @@ function writeStoredValue(key,value){
   }catch(e){memoryStorageFallback.set(key,stored)}
 }
 let gameMode='classic',classicMap='living',hardPointsThisRun=0;
+const TUTORIAL_SEEN_KEY='ratKingTutorialSeenV1';
 
 const DAILY_CHALLENGE_STORAGE_KEY='ratKingDailyChallengesV1';
 const DAILY_CHALLENGE_CATALOG=[
@@ -1764,6 +1765,18 @@ document.getElementById('openRatSkins').addEventListener('click',()=>{refreshCol
 document.getElementById('closeSkinModal').addEventListener('click',()=>document.getElementById('skinModal').classList.add('hidden'));
 document.getElementById('openCollections').addEventListener('click',()=>{renderCollectionBook();document.getElementById('collectionModal').classList.remove('hidden')});
 document.getElementById('closeCollections').addEventListener('click',()=>document.getElementById('collectionModal').classList.add('hidden'));
+const tutorialDialog=document.getElementById('tutorialDialog');
+function openTutorial(){
+  if(!tutorialDialog.open)tutorialDialog.showModal();
+}
+function closeTutorial(){
+  if(tutorialDialog.open)tutorialDialog.close();
+}
+document.getElementById('openTutorial').addEventListener('click',openTutorial);
+document.getElementById('closeTutorial').addEventListener('click',closeTutorial);
+document.getElementById('closeTutorialAction').addEventListener('click',closeTutorial);
+tutorialDialog.addEventListener('close',()=>writeStoredValue(TUTORIAL_SEEN_KEY,'true'));
+if(readStoredValue(TUTORIAL_SEEN_KEY)!=='true')openTutorial();
 function setJoy(e){const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy,max=48,d=Math.hypot(dx,dy)||1;if(d>max){dx=dx/d*max;dy=dy/d*max}knob.style.transform=`translate(${dx}px,${dy}px)`;keys.x=dx/max;keys.y=dy/max}
 joy.addEventListener('pointerdown',e=>{joyId=e.pointerId;joy.setPointerCapture(joyId);setJoy(e)});joy.addEventListener('pointermove',e=>{if(e.pointerId===joyId)setJoy(e)});function resetJoy(){joyId=null;knob.style.transform='translate(0,0)';keys.x=0;keys.y=0}joy.addEventListener('pointerup',resetJoy);joy.addEventListener('pointercancel',resetJoy);function triggerBoost(){
   if(playing&&gameMode==='classic')dailyRunStats.usedBoost=true;

@@ -20,12 +20,24 @@
 <div id="menuLeaderboardPanel" class="leaderboard hidden"><p class="leaderboardTitle">🎭 Karneval · Top 5 · <span id="menuLeaderboardDifficulty">Leicht</span></p><ol id="menuLeaderboardList"></ol></div>
 <section class="dailyChallenges" aria-labelledby="dailyChallengeHeading"><div class="dailyChallengeHeader"><p id="dailyChallengeHeading" class="dailyChallengeHeading">🎯 Tagesherausforderungen</p><span class="dailyChallengeBadges">🏅 <span id="dailyChallengeBadgeCount">0</span></span></div><ol id="dailyChallengeList"></ol></section>
 <p class="small">🏆 Schwer-Punkte: <b id="hardWins">0</b></p>
-<div class="unlockHint">🔓 50 🏆 auf NORMAL schaltet die nächste Karte + SCHWER frei</div><button id="openRatSkins" type="button">🐾 FIGUR AUSWÄHLEN · <span id="selectedRatName">Klassisch</span></button><button id="openCollections" type="button">📚 SAMMELBÜCHER</button><button id="start">SPIELEN</button></div></div>
+<div class="unlockHint">🔓 50 🏆 auf NORMAL schaltet die nächste Karte + SCHWER frei</div><button id="openRatSkins" type="button">🐾 FIGUR AUSWÄHLEN · <span id="selectedRatName">Klassisch</span></button><button id="openCollections" type="button">📚 SAMMELBÜCHER</button><button id="openTutorial" type="button">❔ HILFE</button><button id="start">SPIELEN</button></div></div>
 <div id="over" class="hidden"><div class="card"><div id="resultIcon" style="font-size:58px">👑</div><h2 id="resultTitle">RAT KING!</h2><p>🏆 Best: <b id="resultHighValue">0</b></p><p>🏆 Schwer-Punkte: <b id="resultHardWins">0</b></p><p id="hardWinReward" class="small hidden"></p><p id="resultText"></p><p id="dailyChallengeResult" class="dailyChallengeResult small hidden" aria-live="polite"></p><div id="resultLeaderboardPanel" class="leaderboard hidden"><p class="leaderboardTitle">🎭 Deine Top 5 · <span id="resultLeaderboardDifficulty">Leicht</span></p><ol id="resultLeaderboardList"></ol></div><button id="again">NOCHMAL</button><button id="overMenu" class="secondary">MENÜ</button></div></div>
 <div id="skinModal" class="hidden"><div class="skinCard"><h2>Figur auswählen</h2><p class="small">Dein Guthaben: 🏆 <b id="skinPoints">0</b> Schwer-Punkte</p><div id="skinList"></div><button id="closeSkinModal" class="secondary">ZURÜCK</button></div></div>
 <div id="collectionModal" class="hidden"><div class="collectionCard"><h2>📚 Sammelbücher</h2><p class="small">Jeder eingesammelte Leckerbissen zählt – auch im Karneval. Effekte zählen nicht.</p><div id="collectionList"></div><button id="closeCollections" class="secondary">ZURÜCK</button></div></div>
 <button id="pauseBtn" class="hidden" type="button" aria-label="Spiel pausieren">PAUSE</button><button id="menuBtn" class="hidden" type="button">MENÜ</button>
 <div id="controls" class="hidden"><div id="joy" class="joystick"><div id="knob" class="knob"></div></div><button id="dash" class="dash">💨</button></div>
+<dialog id="tutorialDialog" aria-labelledby="tutorialHeading" aria-describedby="tutorialIntro">
+  <div class="tutorialHeader"><h2 id="tutorialHeading">🐀 So geht's</h2><button id="closeTutorial" class="tutorialClose" type="button" aria-label="Hilfe schließen">×</button></div>
+  <p id="tutorialIntro" class="small">Sammle Leckerbissen, trickse die Katze aus und werde Rat King!</p>
+  <ul class="tutorialSteps">
+    <li><strong>Bewegen:</strong> Nutze den Joystick auf dem Handy oder WASD/Pfeiltasten am Computer.</li>
+    <li><strong>Boost:</strong> Tippe 💨 oder drücke die Leertaste, um kurz schneller zu laufen.</li>
+    <li><strong>Leckerbissen:</strong> Sammle 20 Stück, bevor die 60 Sekunden um sind. Verschiedene Sorten geben unterschiedlich viele Punkte.</li>
+    <li><strong>Aufpassen:</strong> Weiche der Katze und dem Totenkopf aus. Chili macht dich schneller, Verdorbenes bremst dich und der Hund verscheucht die Katze.</li>
+    <li><strong>Rattentunnel:</strong> Lauf über ein Loch, um zu einem anderen zu springen. Danach sind die Tunnel kurz gesperrt.</li>
+  </ul>
+  <button id="closeTutorialAction" type="button">ALLES KLAR</button>
+</dialog>
 </div>
 <script src="js/game.js"></script>
 </body>

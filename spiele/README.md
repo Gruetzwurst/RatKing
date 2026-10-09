@@ -16,6 +16,10 @@ Ein browserbasiertes Sammel-und-Ausweich-Spiel. Die aktuelle Spielseite ist `Rat
 
 Im klassischen Modus gibt es täglich drei neue Aufgaben. Erfüllungen und verdiente Tagesabzeichen werden lokal im jeweiligen Browser gespeichert. Karnevalsrunden zählen nicht für die Tagesaufgaben.
 
+## Hilfe
+
+Beim ersten Öffnen erscheint eine kurze Einführung zu Steuerung, Leckerbissen, Gefahren und Rattentunneln. Sie lässt sich schließen und später über **HILFE** im Hauptmenü erneut öffnen.
+
 ## Live-Vorschau
 
 Starte im Projektordner:
