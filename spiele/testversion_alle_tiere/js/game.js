@@ -459,13 +459,13 @@ const UNLOCK_KEY='ratKingAllAnimalsTestUnlocks';
 function loadUnlocks(){
   const fallback={
     maps:Object.fromEntries(MAP_ORDER.map(id=>[id,true])),
-    hard:Object.fromEntries(MAP_ORDER.map(id=>[id,false]))
+    hard:Object.fromEntries(MAP_ORDER.map(id=>[id,true]))
   };
   try{
     const saved=JSON.parse(localStorage.getItem(UNLOCK_KEY)||'null');
     return {
       maps:fallback.maps,
-      hard:{...fallback.hard,...(saved?.hard||{})}
+      hard:fallback.hard
     };
   }catch(e){ return fallback; }
 }
