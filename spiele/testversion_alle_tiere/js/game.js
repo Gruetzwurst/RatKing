@@ -893,7 +893,7 @@ function update(dt){updateRatFacing();
     }
   }
 
-  if(gameMode!=='timed'&&catHitCooldown<=0&&Math.hypot(rat.x-cat.x,rat.y-cat.y)<42){catHitCooldown=1.5;end(false,'cat');return}
+  if(catHitCooldown<=0&&Math.hypot(rat.x-cat.x,rat.y-cat.y)<42){catHitCooldown=1.5;end(false,'cat');return}
   updateCamera();
 }
 function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
