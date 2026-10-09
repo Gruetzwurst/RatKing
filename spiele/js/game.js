@@ -245,7 +245,7 @@ const RAT_SKINS=[
   {id:'grillLlama',name:'Wurst-Dackel',description:'Langer Dackel mit Wurstkörper und Senfstreifen',animal:'sausageDachshund',bookKey:'meat',body:'#a74932',belly:'#d46b42',ear:'#704137',nose:'#332523',shade:'#77362b'},
   {id:'trashDragon',name:'Mülltonnen-Drache',description:'Frisst wirklich alles',animal:'trashDragon',bookKey:'allEater',body:'#538b53',belly:'#a8bd78',ear:'#78ab63',nose:'#536b42',shade:'#34583b'},
   {id:'rocketSnail',name:'Raketen-Schnecke',description:'Zündet bei jedem Boost den Turbo',animal:'rocketSnail',achievementKey:'boostMaster',body:'#79c6db',belly:'#c3e8dd',ear:'#e99a7d',nose:'#ef8e71',shade:'#3d738a'},
-  {id:'deepSeaMole',name:'Tiefsee-Maulwurf im Taucheranzug',description:'Taucher aus den tiefsten Tunneln',animal:'deepSeaMole',achievementKey:'tunnelMaster',body:'#61537d',belly:'#b4a6ca',ear:'#9c79a6',nose:'#e78396',shade:'#39304f'},
+  {id:'deepSeaMole',name:'Tiefsee-Maulwurf im Taucheranzug',description:'Taucher aus den tiefsten Tunneln',animal:'deepSeaMole',achievementKey:'tunnelMaster',body:'#594b50',belly:'#9e8c87',ear:'#b47780',nose:'#e78396',shade:'#332b33'},
   {id:'demonRat',name:'Dämonen-Ratte',description:'Herrscherin über 50 gewonnene Runden',animal:'demonRat',achievementKey:'classicChampion',body:'#4b254d',belly:'#b34a54',ear:'#e46e72',nose:'#f05a4f',shade:'#24142d'},
   {id:'furnitureOctopus',name:'Möbelhaus-Oktopus mit Kompass',description:'Bezwingt jeden Raum auf Schwer',animal:'furnitureOctopus',achievementKey:'hardCartographer',body:'#c16b54',belly:'#f0b879',ear:'#e9a08a',nose:'#523b68',shade:'#713f58'},
   {id:'discoCrab',name:'Disco-Krabbe im Narrenkostüm',description:'Feiert 25 schwere Karnevalssiege',animal:'discoCrab',achievementKey:'carnivalLegend',body:'#e75077',belly:'#ffb361',ear:'#ff9aa7',nose:'#743e86',shade:'#98365d'}
@@ -1187,9 +1187,11 @@ function drawTrotFeet(target,feet,footY,phase,moving,color='#3b342f',width=2.2,f
 }
 function drawSheepSprite(target,x,y,skin,direction,scale,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,16,18,2.6,0,0,Math.PI*2);target.fill();
   // Compact sheep body covered by distinct wool curls.
   target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,4,17,11,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(0,1,15,10,0,0,Math.PI*2);target.arc(-10,-4,6,0,Math.PI*2);target.arc(-3,-8,6,0,Math.PI*2);target.arc(5,-7,6,0,Math.PI*2);target.arc(11,-3,6,0,Math.PI*2);target.arc(5,6,6,0,Math.PI*2);target.arc(-5,7,6,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff88';target.lineWidth=1.15;target.beginPath();target.arc(-10,-4,4.2,Math.PI*1.05,Math.PI*1.8);target.arc(-3,-8,4.1,Math.PI*1.08,Math.PI*1.8);target.arc(5,-7,4.1,Math.PI*1.1,Math.PI*1.8);target.arc(11,-3,4,Math.PI*1.1,Math.PI*1.8);target.stroke();
   // Face, floppy ears and pink muzzle sit at the front of the fleece.
   target.fillStyle='#70564c';target.beginPath();target.ellipse(-15,-6,7,8,-.15,0,Math.PI*2);target.fill();
   target.fillStyle='#d9999b';target.beginPath();target.ellipse(-20,-12,5,2.3,-.35,0,Math.PI*2);target.ellipse(-10,-12,5,2.3,.35,0,Math.PI*2);target.fill();
@@ -1199,12 +1201,15 @@ function drawSheepSprite(target,x,y,skin,direction,scale,phase=0,moving=false){
 }
 function drawSugarHamsterSprite(target,x,y,skin,direction,scale,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';target.lineCap='round';
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,16,17,2.7,0,0,Math.PI*2);target.fill();
+  drawTrotFeet(target,[-8,5],14,phase,moving,'#83586a',1.8,1.8);
   // A round hamster silhouette with tiny ears and cheek pouches.
   target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,4,17,12,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(1,1,16,11,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.ear;target.beginPath();target.arc(-13,-9,5.3,0,Math.PI*2);target.arc(-2,-11,5,0,Math.PI*2);target.fill();target.fillStyle='#ffe0e6';target.beginPath();target.arc(-13,-9,2.7,0,Math.PI*2);target.arc(-2,-11,2.5,0,Math.PI*2);target.fill();
   target.fillStyle=skin.belly;target.beginPath();target.ellipse(5,7,9,5,0,0,Math.PI*2);target.fill();
   target.fillStyle='#f7b3c6';target.beginPath();target.ellipse(-17,2,5,4,0,0,Math.PI*2);target.ellipse(-5,3,5,4,0,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff88';target.lineWidth=1;target.beginPath();target.ellipse(-17,1,3,1.5,-.2,Math.PI*1.1,Math.PI*1.8);target.ellipse(-5,2,3,1.5,-.2,Math.PI*1.1,Math.PI*1.8);target.stroke();
   // Oversized glossy eyes, starry highlights and raised brows show the sugar rush.
   target.fillStyle='#fffaf5';target.beginPath();target.ellipse(-16,-5,5.1,6,0,0,Math.PI*2);target.ellipse(-5,-6,5.1,6,0,0,Math.PI*2);target.fill();
   target.fillStyle='#57375f';target.beginPath();target.ellipse(-15,-4,3,4.1,-.1,0,Math.PI*2);target.ellipse(-4,-5,3,4.1,-.1,0,Math.PI*2);target.fill();
@@ -1222,9 +1227,13 @@ function drawHeroRaccoonSprite(target,x,y,skin,direction,scale,phase=0,moving=fa
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';
   // Long striped tail, pointed ears and eye mask give a clear raccoon silhouette.
   target.strokeStyle='#4a4848';target.lineWidth=8;target.beginPath();target.moveTo(8,5);target.bezierCurveTo(17,-2,25,8,29,1);target.stroke();target.strokeStyle='#e5ded1';target.lineWidth=2.3;target.beginPath();target.moveTo(19,2);target.lineTo(22,5);target.moveTo(25,1);target.lineTo(28,4);target.stroke();
-  // Red superhero cape behind the body.
-  target.fillStyle='#c83738';target.beginPath();target.moveTo(1,-4);target.lineTo(15,-7);target.lineTo(20,12);target.lineTo(6,7);target.closePath();target.fill();
+  target.strokeStyle='#77746d';target.lineWidth=1;target.beginPath();target.moveTo(11,2);target.bezierCurveTo(18,-2,23,7,28,2);target.stroke();
+  // Cape attaches at the shoulders and trails behind the body, not below the rump.
+  target.fillStyle='#b93236';target.beginPath();target.moveTo(-7,-7);target.quadraticCurveTo(3,-10,10,-8);target.quadraticCurveTo(17,-5,19,-1);target.lineTo(11,1);target.quadraticCurveTo(4,-2,-3,-2);target.closePath();target.fill();
+  target.strokeStyle='#ef796c';target.lineWidth=1;target.beginPath();target.moveTo(0,-7);target.quadraticCurveTo(8,-7,15,-3);target.stroke();
+  target.fillStyle='#df4a47';target.beginPath();target.moveTo(-8,-8);target.lineTo(-3,-11);target.lineTo(2,-8);target.lineTo(-3,-4);target.closePath();target.fill();
   target.fillStyle='#66645f';target.beginPath();target.ellipse(0,3,15,10,0,0,Math.PI*2);target.fill();target.fillStyle='#e6ddcd';target.beginPath();target.ellipse(3,6,8,4,0,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff48';target.lineWidth=1;target.beginPath();target.ellipse(-1,-1,9,4,-.1,Math.PI*1.1,Math.PI*1.8);target.stroke();
   drawTrotFeet(target,[-7,7],15,phase,moving,'#44413d',2.3,2.5);
   target.fillStyle='#77736a';target.beginPath();target.arc(-12,-7,8,0,Math.PI*2);target.fill();target.fillStyle='#514e4b';target.beginPath();target.moveTo(-18,-10);target.lineTo(-19,-20);target.lineTo(-11,-14);target.lineTo(-5,-19);target.lineTo(-4,-9);target.closePath();target.fill();
   target.fillStyle='#f1e9db';target.beginPath();target.ellipse(-16,-6,4.8,3.1,0,0,Math.PI*2);target.fill();target.ellipse(-7,-6,4.8,3.1,0,0,Math.PI*2);target.fill();
@@ -1236,53 +1245,105 @@ function drawHeroRaccoonSprite(target,x,y,skin,direction,scale,phase=0,moving=fa
 }
 function drawSausageDachshundSprite(target,x,y,skin,direction,scale,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';target.lineCap='round';
-  // Very long low body, short legs and drooping ears make the dachshund shape unmistakable.
-  target.fillStyle='#71372b';target.beginPath();target.moveTo(-9,-1);target.quadraticCurveTo(3,-8,19,-2);target.quadraticCurveTo(23,1,18,8);target.quadraticCurveTo(2,13,-12,7);target.closePath();target.fill();
-  target.fillStyle='#b34f36';target.beginPath();target.moveTo(-10,-3);target.quadraticCurveTo(2,-10,17,-4);target.quadraticCurveTo(21,-1,17,5);target.quadraticCurveTo(1,10,-11,5);target.closePath();target.fill();
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,14,23,2.4,0,0,Math.PI*2);target.fill();
+  // One continuous silhouette carries the long back into the sloped dachshund neck.
+  target.fillStyle='#71372b';target.beginPath();target.moveTo(19,-2);target.quadraticCurveTo(23,1,18,8);target.quadraticCurveTo(2,13,-12,8);target.quadraticCurveTo(-17,6,-16,1);target.quadraticCurveTo(-19,-2,-24,-2);target.quadraticCurveTo(-28,-4,-26,-8);target.quadraticCurveTo(-23,-11,-18,-9);target.quadraticCurveTo(-13,-12,-9,-7);target.quadraticCurveTo(4,-9,16,-5);target.closePath();target.fill();
+  target.fillStyle='#b34f36';target.beginPath();target.moveTo(17,-3);target.quadraticCurveTo(20,0,16,5);target.quadraticCurveTo(1,10,-11,6);target.quadraticCurveTo(-15,4,-14,0);target.quadraticCurveTo(-17,-3,-22,-3);target.quadraticCurveTo(-25,-5,-23,-8);target.quadraticCurveTo(-20,-10,-16,-7);target.quadraticCurveTo(-12,-10,-8,-5);target.quadraticCurveTo(4,-7,17,-3);target.closePath();target.fill();
   // Sausage casing shine and a wavy mustard stripe.
   target.strokeStyle='#f5a36c';target.lineWidth=1.2;target.beginPath();target.moveTo(-5,-5);target.quadraticCurveTo(5,-8,14,-4);target.stroke();target.strokeStyle='#f5dc58';target.lineWidth=2.2;target.beginPath();target.moveTo(-7,-1);target.quadraticCurveTo(-3,-5,1,-1);target.quadraticCurveTo(5,3,9,-1);target.quadraticCurveTo(12,-4,15,-1);target.stroke();
+  target.strokeStyle='#ffd19a';target.lineWidth=.8;target.beginPath();target.moveTo(-3,5);target.quadraticCurveTo(6,8,14,4);target.stroke();
   drawTrotFeet(target,[-6,3,12],13,phase,moving,'#56382f',2.5,2);
   target.strokeStyle='#71372b';target.lineWidth=2;target.beginPath();target.moveTo(18,-1);target.quadraticCurveTo(24,-5,25,-1);target.stroke();
-  target.fillStyle='#b34f36';target.beginPath();target.ellipse(-12,-4,7,6,-.1,0,Math.PI*2);target.fill();target.ellipse(-19,-6,6,5,.1,0,Math.PI*2);target.fill();
-  target.fillStyle='#77382e';target.beginPath();target.ellipse(-16,-7,3,6,-.35,0,Math.PI*2);target.fill();
-  target.fillStyle='#e9b9a4';target.beginPath();target.ellipse(-23,-5,4,2.5,0,0,Math.PI*2);target.fill();target.fillStyle='#25211f';target.beginPath();target.arc(-19,-10,1.2,0,Math.PI*2);target.fill();target.ellipse(-26,-5,1.4,1,0,0,Math.PI*2);target.fill();
+  target.fillStyle='#77382e';target.beginPath();target.ellipse(-17,-5,3.2,6,-.35,0,Math.PI*2);target.fill();
+  target.fillStyle='#e9b9a4';target.beginPath();target.ellipse(-22,-5,3.5,2.2,0,0,Math.PI*2);target.fill();target.fillStyle='#25211f';target.beginPath();target.arc(-17,-9,1.2,0,Math.PI*2);target.fill();target.ellipse(-25,-5,1.4,1,0,0,Math.PI*2);target.fill();
   target.restore();
 }
 function drawTrashDragonSprite(target,x,y,skin,direction,scale,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(2,16,20,2.8,0,0,Math.PI*2);target.fill();
   target.fillStyle='#345f43';target.beginPath();target.moveTo(4,2);target.quadraticCurveTo(19,8,26,0);target.lineTo(32,-4);target.lineTo(29,5);target.lineTo(22,8);target.quadraticCurveTo(13,13,4,9);target.closePath();target.fill();
   target.fillStyle='#4c8a56';target.beginPath();target.ellipse(0,3,16,10,-.05,0,Math.PI*2);target.fill();target.fillStyle='#a8bd78';target.beginPath();target.ellipse(-1,7,10,4,0,0,Math.PI*2);target.fill();
-  // Broad bat wings and ribs make the silhouette read as a dragon.
-  target.fillStyle='#376947';target.beginPath();target.moveTo(1,-2);target.lineTo(4,-20);target.lineTo(11,-11);target.lineTo(18,-17);target.lineTo(18,1);target.closePath();target.fill();target.strokeStyle='#9ab66d';target.lineWidth=1;target.beginPath();target.moveTo(4,-19);target.lineTo(7,-3);target.moveTo(11,-11);target.lineTo(7,-3);target.moveTo(18,-17);target.lineTo(7,-3);target.stroke();
+  // A webbed shoulder wing sits over the back, with curved scallops between its fingers.
+  target.fillStyle='#315e43';target.beginPath();target.moveTo(-8,-3);target.quadraticCurveTo(-15,-14,-15,-24);target.quadraticCurveTo(-10,-23,-4,-14);target.lineTo(-1,-29);target.quadraticCurveTo(7,-25,11,-15);target.quadraticCurveTo(16,-8,8,0);target.quadraticCurveTo(0,1,-8,-3);target.closePath();target.fill();
+  target.strokeStyle='#234b36';target.lineWidth=1.2;target.stroke();
+  target.strokeStyle='#b2cb7f';target.lineWidth=1.1;target.beginPath();target.moveTo(-8,-3);target.quadraticCurveTo(-11,-13,-13,-21);target.moveTo(-7,-3);target.quadraticCurveTo(-4,-13,-1,-27);target.moveTo(-6,-3);target.quadraticCurveTo(3,-10,10,-14);target.stroke();
   drawTrotFeet(target,[-8,3,10],14,phase,moving,'#31583e',3,2.3);
   const neckSway=moving?Math.sin(phase)*.06:0;target.save();target.translate(-9,0);target.rotate(neckSway);target.translate(9,0);
   target.fillStyle='#579b5e';target.beginPath();target.moveTo(-9,-1);target.quadraticCurveTo(-13,-13,-18,-17);target.lineTo(-25,-15);target.quadraticCurveTo(-30,-12,-25,-7);target.lineTo(-17,-6);target.lineTo(-13,1);target.closePath();target.fill();
+  target.strokeStyle='#a9ce83';target.lineWidth=.9;target.beginPath();target.moveTo(-15,-14);target.quadraticCurveTo(-18,-10,-16,-7);target.stroke();
   target.fillStyle='#e1c164';target.beginPath();target.moveTo(-21,-15);target.lineTo(-23,-23);target.lineTo(-17,-17);target.closePath();target.moveTo(-14,-16);target.lineTo(-11,-23);target.lineTo(-10,-15);target.closePath();target.fill();target.fillStyle='#f0d18c';target.beginPath();target.ellipse(-24,-9,4,2.3,0,0,Math.PI*2);target.fill();target.fillStyle='#22261f';target.beginPath();target.arc(-19,-12,1.4,0,Math.PI*2);target.fill();target.restore();
   // The metal bin lid and ribbed can armor connect the dragon to its reward theme.
   target.fillStyle='#687b56';target.beginPath();target.roundRect(-3,2,12,9,2);target.fill();target.fillStyle='#a4bd76';target.fillRect(-4,0,14,3);target.fillStyle='#596b50';target.fillRect(-1,4,1.5,5);target.fillRect(4,4,1.5,5);target.fillRect(8,4,1.5,5);target.fillStyle='#ded5b6';target.fillRect(-1,-1,7,1.5);target.restore();
 }
 function drawAchievementCreature(target,x,y,skin,direction,scale,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';target.lineCap='round';
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,16,19,2.8,0,0,Math.PI*2);target.fill();
   if(skin.animal==='rocketSnail'){
     drawTrotFeet(target,[-7,6],15,phase,moving,'#426a7b',2.2,2.5);
     target.fillStyle='#314d64';target.beginPath();target.moveTo(8,-3);target.lineTo(23,-10);target.lineTo(20,-2);target.lineTo(27,1);target.lineTo(18,3);target.lineTo(22,10);target.lineTo(8,6);target.closePath();target.fill();
     target.fillStyle='#e64f3d';target.beginPath();target.moveTo(19,-5);target.lineTo(30,-2);target.lineTo(22,1);target.lineTo(32,5);target.lineTo(17,4);target.closePath();target.fill();
     target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,5,18,8,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(0,3,16,7,0,0,Math.PI*2);target.fill();
-    target.fillStyle='#d88e52';target.beginPath();target.arc(2,-7,12,0,Math.PI*2);target.fill();target.fillStyle='#edbd74';target.beginPath();target.arc(2,-8,9,0,Math.PI*2);target.fill();target.strokeStyle='#9a573e';target.lineWidth=2;target.beginPath();target.arc(4,-8,5,.4,Math.PI*1.8);target.stroke();target.strokeStyle='#f5d49c';target.lineWidth=1;target.beginPath();target.arc(4,-8,2,.4,Math.PI*1.7);target.stroke();
-    target.strokeStyle=skin.body;target.lineWidth=2.5;target.beginPath();target.moveTo(-10,-1);target.lineTo(-13,-9);target.moveTo(-5,-2);target.lineTo(-7,-11);target.stroke();target.fillStyle='#272534';target.beginPath();target.arc(-13,-9,2.3,0,Math.PI*2);target.arc(-7,-11,2.3,0,Math.PI*2);target.fill();target.fillStyle='#fff';target.beginPath();target.arc(-13.5,-9.5,.8,0,Math.PI*2);target.arc(-7.5,-11.5,.8,0,Math.PI*2);target.fill();target.restore();return;
+    target.fillStyle='#d88e52';target.beginPath();target.arc(4,-7,12,0,Math.PI*2);target.fill();target.fillStyle='#edbd74';target.beginPath();target.arc(4,-8,9,0,Math.PI*2);target.fill();target.strokeStyle='#9a573e';target.lineWidth=2;target.beginPath();target.arc(6,-8,5,.4,Math.PI*1.8);target.stroke();target.strokeStyle='#f5d49c';target.lineWidth=1;target.beginPath();target.arc(6,-8,2,.4,Math.PI*1.7);target.stroke();
+    target.fillStyle=skin.body;target.beginPath();target.ellipse(-14,-2,7,7,0,0,Math.PI*2);target.fill();target.strokeStyle=skin.shade;target.lineWidth=2.2;target.beginPath();target.moveTo(-14,-3);target.quadraticCurveTo(-16,-10,-18,-12);target.moveTo(-8,-3);target.quadraticCurveTo(-9,-11,-10,-13);target.stroke();
+    target.fillStyle='#272534';target.beginPath();target.arc(-18,-13,2.2,0,Math.PI*2);target.arc(-10,-14,2.2,0,Math.PI*2);target.fill();target.fillStyle='#fff';target.beginPath();target.arc(-18.5,-13.5,.7,0,Math.PI*2);target.arc(-10.5,-14.5,.7,0,Math.PI*2);target.fill();target.fillStyle=skin.nose;target.beginPath();target.ellipse(-20,1,2,1.5,0,0,Math.PI*2);target.fill();target.restore();return;
   }
   if(skin.animal==='deepSeaMole'){
-    drawTrotFeet(target,[-7,7],15,phase,moving,'#443a55',2.5,2.8);
-    target.fillStyle='#46516d';target.beginPath();target.roundRect(8,-11,9,23,3);target.fill();target.fillStyle='#ed873d';target.fillRect(9,-9,7,4);target.fillStyle='#f5c861';target.fillRect(9,0,7,3);target.fillStyle='#d7e5e5';target.beginPath();target.ellipse(0,3,16,11,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(-1,1,14,10,0,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.ellipse(4,6,8,4,0,0,Math.PI*2);target.fill();
-    target.fillStyle='#d4a18c';target.beginPath();target.ellipse(-11,-4,7,6,0,0,Math.PI*2);target.fill();target.fillStyle=skin.shade;target.beginPath();target.ellipse(-14,-2,8,5,0,0,Math.PI*2);target.fill();target.fillStyle='#e9c8b2';target.beginPath();target.ellipse(-21,-2,4,3,0,0,Math.PI*2);target.fill();
-    target.fillStyle='#f3c64f';target.beginPath();target.arc(-7,-8,11,Math.PI,Math.PI*2);target.lineTo(4,-3);target.lineTo(-18,-3);target.closePath();target.fill();target.strokeStyle='#fff0a8';target.lineWidth=2.2;target.beginPath();target.arc(-7,-7,8,Math.PI,Math.PI*2);target.stroke();target.fillStyle='#bff4ff';target.beginPath();target.arc(-10,-6,2,0,Math.PI*2);target.arc(-4,-6,2,0,Math.PI*2);target.fill();target.fillStyle='#34445b';target.beginPath();target.arc(-10,-6,1,0,Math.PI*2);target.arc(-4,-6,1,0,Math.PI*2);target.fill();target.fillStyle='#fff5c7';target.beginPath();target.arc(-15,-15,1.4,0,Math.PI*2);target.arc(-9,-18,1,0,Math.PI*2);target.fill();target.restore();return;
+    const gait=moving?Math.sin(phase)*1.2:0;
+    target.fillStyle='#8b9a8438';target.beginPath();target.ellipse(0,16,20,2.5,0,0,Math.PI*2);target.fill();
+    target.strokeStyle='#42394c';target.lineWidth=3;target.beginPath();target.moveTo(7,5);target.quadraticCurveTo(7+gait,10,8+gait,13);target.moveTo(13,4);target.quadraticCurveTo(13-gait,9,14-gait,12);target.stroke();
+    target.fillStyle='#d9a8a0';target.beginPath();target.ellipse(8+gait,13,2.5,1.3,0,0,Math.PI*2);target.ellipse(14-gait,12,2.5,1.3,0,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.shade;target.beginPath();target.moveTo(-25,0);target.quadraticCurveTo(-23,-8,-14,-10);target.quadraticCurveTo(-2,-13,10,-10);target.quadraticCurveTo(18,-8,19,-2);target.quadraticCurveTo(20,6,12,10);target.quadraticCurveTo(0,13,-13,9);target.quadraticCurveTo(-22,7,-25,0);target.closePath();target.fill();
+    target.fillStyle=skin.body;target.beginPath();target.moveTo(-24,-1);target.quadraticCurveTo(-21,-7,-13,-8);target.quadraticCurveTo(-2,-11,10,-8);target.quadraticCurveTo(16,-6,17,-1);target.quadraticCurveTo(18,5,11,8);target.quadraticCurveTo(0,11,-12,7);target.quadraticCurveTo(-20,5,-24,-1);target.closePath();target.fill();
+    target.fillStyle=skin.belly;target.beginPath();target.ellipse(4,5,7,3,0,0,Math.PI*2);target.fill();
+    // A mole has just two small rear feet and one shovel-shaped hand on each forelimb.
+    target.strokeStyle='#493d53';target.lineWidth=4;target.beginPath();target.moveTo(-8,1);target.quadraticCurveTo(-10,4,-13,7+gait);target.moveTo(-5,2);target.quadraticCurveTo(-7,6,-9,9-gait);target.stroke();
+    target.fillStyle='#b78598';target.beginPath();target.ellipse(-16,8+gait,6.5,4.2,-.35,0,Math.PI*2);target.ellipse(-8,10-gait,6,4,-.3,0,Math.PI*2);target.fill();
+    target.strokeStyle='#f0d5bf';target.lineWidth=1;target.beginPath();target.moveTo(-20,7+gait);target.lineTo(-23,4+gait);target.moveTo(-17,9+gait);target.lineTo(-20,12+gait);target.moveTo(-13,10+gait);target.lineTo(-14,14+gait);target.moveTo(-8,11-gait);target.lineTo(-7,15-gait);target.stroke();
+    target.fillStyle='#e7c7b0';target.beginPath();target.moveTo(-17,-4);target.quadraticCurveTo(-23,-5,-28,-1);target.quadraticCurveTo(-23,2,-17,1);target.closePath();target.fill();
+    target.fillStyle='#e87589';target.beginPath();target.ellipse(-28,-1,1.7,1.35,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#302b42';target.beginPath();target.arc(-18,-5,1,0,Math.PI*2);target.fill();
+    target.strokeStyle='#f1d6c3';target.lineWidth=.6;target.beginPath();target.moveTo(-23,-1);target.lineTo(-27,1);target.moveTo(-23,-3);target.lineTo(-27,-4);target.stroke();
+    target.fillStyle='#48cde080';target.beginPath();target.ellipse(-19,-5,3.2,2.6,0,0,Math.PI*2);target.ellipse(-12,-5,3.2,2.6,0,0,Math.PI*2);target.fill();
+    target.strokeStyle='#332e43';target.lineWidth=2;target.beginPath();target.ellipse(-19,-5,3.8,3.2,0,0,Math.PI*2);target.ellipse(-12,-5,3.8,3.2,0,0,Math.PI*2);target.moveTo(-15.2,-5);target.lineTo(-15.8,-5);target.stroke();
+    target.strokeStyle='#e4b54f';target.lineWidth=.8;target.beginPath();target.ellipse(-19,-5,4.2,3.6,0,0,Math.PI*2);target.ellipse(-12,-5,4.2,3.6,0,0,Math.PI*2);target.stroke();
+    target.strokeStyle='#4a4056';target.lineWidth=1.1;target.beginPath();target.moveTo(-9,-5);target.lineTo(-6,-5);target.stroke();
+    target.strokeStyle='#f0a746';target.lineWidth=1.8;target.beginPath();target.moveTo(-8,-6);target.bezierCurveTo(-5,-10,-7,-19,-3,-21);target.lineTo(0,-21);target.stroke();
+    target.strokeStyle='#fff0a8';target.lineWidth=.8;target.beginPath();target.moveTo(-6,-9);target.bezierCurveTo(-4,-13,-5,-18,-3,-19);target.stroke();
+    target.restore();return;
   }
   if(skin.animal==='demonRat'){
-    drawTrotFeet(target,[-7,7],14,phase,moving,skin.shade,2.6,2.5);
-    target.strokeStyle=skin.shade;target.lineWidth=3;target.beginPath();target.moveTo(10,5);target.bezierCurveTo(23,-1,22,15,31,7);target.stroke();target.fillStyle='#e95743';target.beginPath();target.arc(31,7,2,0,Math.PI*2);target.fill();
-    target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,2,17,11,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(0,0,15,9,0,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.ellipse(3,5,8,4,0,0,Math.PI*2);target.fill();
-    target.fillStyle='#e7b44e';target.beginPath();target.moveTo(-17,-8);target.quadraticCurveTo(-25,-18,-21,-23);target.quadraticCurveTo(-17,-16,-11,-12);target.closePath();target.fill();target.beginPath();target.moveTo(-7,-11);target.quadraticCurveTo(-7,-23,-1,-25);target.quadraticCurveTo(-3,-16,1,-10);target.closePath();target.fill();
-    target.fillStyle=skin.body;target.beginPath();target.ellipse(-12,-5,9,8,0,0,Math.PI*2);target.fill();target.fillStyle='#f05745';target.beginPath();target.arc(-15,-8,2,0,Math.PI*2);target.arc(-7,-8,2,0,Math.PI*2);target.fill();target.fillStyle='#fff0d4';target.beginPath();target.arc(-15.5,-8.5,.7,0,Math.PI*2);target.arc(-7.5,-8.5,.7,0,Math.PI*2);target.fill();target.fillStyle='#f5b2a5';target.beginPath();target.arc(-21,-5,2,0,Math.PI*2);target.fill();target.restore();return;
+    const gait=moving?Math.sin(phase)*1.2:0;
+    target.fillStyle='#21162b';target.beginPath();target.moveTo(3,-3);target.quadraticCurveTo(4,-13,8,-20);target.quadraticCurveTo(10,-25,14,-28);target.quadraticCurveTo(15,-21,13,-17);target.quadraticCurveTo(20,-22,25,-21);target.quadraticCurveTo(24,-15,20,-12);target.quadraticCurveTo(27,-13,30,-10);target.quadraticCurveTo(24,-3,16,1);target.closePath();target.fill();
+    target.fillStyle='#963b5c';target.beginPath();target.moveTo(6,-4);target.quadraticCurveTo(7,-13,10,-20);target.quadraticCurveTo(12,-24,13,-25);target.quadraticCurveTo(15,-19,12,-15);target.quadraticCurveTo(19,-20,23,-19);target.quadraticCurveTo(22,-13,17,-10);target.quadraticCurveTo(24,-11,27,-9);target.quadraticCurveTo(21,-3,15,-1);target.closePath();target.fill();
+    target.strokeStyle='#ed9aa0';target.lineWidth=1;target.beginPath();target.moveTo(8,-4);target.quadraticCurveTo(12,-12,13,-23);target.moveTo(12,-3);target.quadraticCurveTo(16,-10,22,-17);target.moveTo(15,-2);target.quadraticCurveTo(19,-7,26,-9);target.stroke();
+    target.fillStyle='#261932';target.beginPath();target.moveTo(-1,-4);target.quadraticCurveTo(-3,-13,-1,-20);target.quadraticCurveTo(3,-27,7,-18);target.lineTo(10,-23);target.quadraticCurveTo(16,-18,15,-8);target.lineTo(7,-3);target.closePath();target.fill();
+    target.fillStyle='#74334f';target.beginPath();target.moveTo(0,-5);target.quadraticCurveTo(-1,-13,1,-19);target.quadraticCurveTo(4,-23,7,-16);target.lineTo(10,-20);target.quadraticCurveTo(13,-16,13,-9);target.lineTo(7,-5);target.closePath();target.fill();
+    target.strokeStyle='#d8878f';target.lineWidth=.8;target.beginPath();target.moveTo(0,-20);target.quadraticCurveTo(4,-12,5,-3);target.moveTo(7,-17);target.quadraticCurveTo(7,-10,5,-3);target.moveTo(11,-19);target.quadraticCurveTo(10,-11,5,-3);target.stroke();
+    target.fillStyle='#21162b';target.beginPath();target.moveTo(1,-4);target.quadraticCurveTo(1,-16,6,-25);target.quadraticCurveTo(11,-21,13,-15);target.lineTo(18,-19);target.quadraticCurveTo(22,-11,18,-5);target.lineTo(8,0);target.closePath();target.fill();
+    target.fillStyle='#853b5a';target.beginPath();target.moveTo(2,-5);target.quadraticCurveTo(3,-15,7,-22);target.quadraticCurveTo(11,-19,13,-12);target.lineTo(17,-16);target.quadraticCurveTo(19,-10,16,-6);target.lineTo(8,-2);target.closePath();target.fill();
+    target.strokeStyle='#e0929d';target.lineWidth=.9;target.beginPath();target.moveTo(6,-23);target.quadraticCurveTo(8,-13,8,-2);target.moveTo(12,-14);target.quadraticCurveTo(10,-8,8,-2);target.moveTo(18,-17);target.quadraticCurveTo(12,-9,8,-2);target.stroke();
+    target.strokeStyle=skin.shade;target.lineWidth=2.6;target.beginPath();target.moveTo(10,4);target.bezierCurveTo(20,0,23,13,31,7);target.stroke();
+    target.fillStyle='#ef5849';target.beginPath();target.arc(31,7,2,0,Math.PI*2);target.fill();
+    target.strokeStyle='#21162b';target.lineWidth=1.5;target.beginPath();target.moveTo(7,5);target.lineTo(7+gait,13);target.moveTo(12,5);target.lineTo(12-gait,13);target.stroke();
+    target.fillStyle='#f3c5a9';target.beginPath();target.ellipse(7+gait,13,2.5,1.2,0,0,Math.PI*2);target.ellipse(12-gait,13,2.5,1.2,0,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.shade;target.beginPath();target.ellipse(1,2,17,10,0,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.body;target.beginPath();target.ellipse(0,0,15,8.5,-.05,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.belly;target.beginPath();target.ellipse(3,5,8,3.5,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#30203b';target.beginPath();target.ellipse(-13,-6,8,6.5,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#f1b6a1';target.beginPath();target.ellipse(-15,-7,4.5,3.4,0,0,Math.PI*2);target.fill();
+    target.fillStyle='#672d49';target.beginPath();target.moveTo(-7,-10);target.quadraticCurveTo(-7,-14,-4,-16);target.quadraticCurveTo(0,-14,-1,-10);target.closePath();target.fill();
+    target.fillStyle='#d7758c';target.beginPath();target.moveTo(-6,-11);target.lineTo(-4,-14);target.quadraticCurveTo(-2,-12,-3,-10);target.closePath();target.fill();
+    target.fillStyle='#30203b';target.beginPath();target.moveTo(-10,-10);target.quadraticCurveTo(-8,-16,-4,-19);target.quadraticCurveTo(-4,-13,-6,-9);target.closePath();target.fill();
+    target.fillStyle='#d7758c';target.beginPath();target.moveTo(-9,-11);target.lineTo(-6,-16);target.quadraticCurveTo(-6,-12,-7,-10);target.closePath();target.fill();
+    target.fillStyle='#efb4a0';target.beginPath();target.moveTo(-16,-5);target.quadraticCurveTo(-22,-5,-27,-2);target.quadraticCurveTo(-23,1,-16,0);target.closePath();target.fill();
+    target.fillStyle='#ed5c4d';target.beginPath();target.ellipse(-27,-2,1.7,1.3,0,0,Math.PI*2);target.fill();
+    target.strokeStyle='#f4c7ae';target.lineWidth=.65;target.beginPath();target.moveTo(-22,-1);target.lineTo(-28,1);target.moveTo(-22,-3);target.lineTo(-28,-4);target.stroke();
+    target.fillStyle='#fa5548';target.beginPath();target.arc(-16,-7,1.7,0,Math.PI*2);target.arc(-10,-7,1.3,0,Math.PI*2);target.fill();
+    target.fillStyle='#fff1da';target.beginPath();target.arc(-16.5,-7.5,.5,0,Math.PI*2);target.fill();
+    target.fillStyle='#f4d4a0';target.beginPath();target.moveTo(-17,-10);target.quadraticCurveTo(-22,-15,-21,-23);target.quadraticCurveTo(-16,-20,-14,-12);target.closePath();target.moveTo(-10,-10);target.quadraticCurveTo(-8,-16,-5,-22);target.quadraticCurveTo(-3,-15,-5,-10);target.closePath();target.fill();
+    target.fillStyle='#d95258';target.beginPath();target.moveTo(-17,-11);target.quadraticCurveTo(-20,-15,-20,-20);target.quadraticCurveTo(-16,-17,-15,-12);target.closePath();target.moveTo(-9,-11);target.lineTo(-5,-19);target.quadraticCurveTo(-4,-14,-6,-11);target.closePath();target.fill();
+    target.strokeStyle='#fff0d1';target.lineWidth=.8;target.beginPath();target.moveTo(-20,-17);target.lineTo(-17,-12);target.moveTo(-7,-16);target.lineTo(-7,-12);target.stroke();
+    target.restore();return;
   }
   if(skin.animal==='furnitureOctopus'){
     for(let i=0;i<6;i++){const side=i<3?-1:1,index=i%3,x0=-10+i*4.2,sway=moving?Math.sin(phase+index*.9+(side<0?0:Math.PI))*(2+index):0;target.strokeStyle=skin.shade;target.lineWidth=4.2;target.beginPath();target.moveTo(x0,4);target.bezierCurveTo(x0+side*7,8,x0+side*(12+sway),11,x0+side*(18+index*2),16+sway);target.stroke();target.strokeStyle=skin.body;target.lineWidth=2;target.beginPath();target.moveTo(x0,4);target.bezierCurveTo(x0+side*7,8,x0+side*(12+sway),11,x0+side*(18+index*2),16+sway);target.stroke();for(let cup=0;cup<3;cup++){const cx=x0+side*(7+cup*3+index),cy=8+cup*2+sway*.25;target.fillStyle='#f4d8ad';target.beginPath();target.arc(cx,cy,1.15,0,Math.PI*2);target.fill()}}
@@ -1293,12 +1354,39 @@ function drawAchievementCreature(target,x,y,skin,direction,scale,phase=0,moving=
     target.fillStyle='#8c674b';target.fillRect(3,8,11,5);target.fillStyle='#d4a56c';target.fillRect(4,9,9,3);target.restore();return;
   }
   if(skin.animal==='discoCrab'){
-    target.fillStyle=skin.shade;target.strokeStyle=skin.shade;target.lineWidth=3;
-    for(let i=0;i<3;i++)for(const side of [-1,1]){const legY=-1+i*5,step=moving?Math.sin(phase+i*Math.PI*.85+(side>0?Math.PI:0))*2.2:0;target.beginPath();target.moveTo(side*7,legY);target.lineTo(side*(14+step),legY+4);target.lineTo(side*(18+step),legY+2);target.stroke();target.fillStyle='#f4b46a';target.beginPath();target.arc(side*(18+step),legY+2,1.5,0,Math.PI*2);target.fill()}
-    target.beginPath();target.ellipse(0,3,16,12,0,0,Math.PI*2);target.fill();target.fillStyle=skin.body;target.beginPath();target.ellipse(-1,1,13.5,9,0,0,Math.PI*2);target.fill();target.fillStyle='#ffd78a';target.beginPath();target.arc(-6,-2,1.6,0,Math.PI*2);target.arc(1,-4,1.2,0,Math.PI*2);target.arc(5,1,1.4,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.ellipse(4,5,7,5,0,0,Math.PI*2);target.fill();
-    for(const side of [-1,1]){const clawX=side*15,clawY=-5+(side<0?0:1);target.strokeStyle=skin.shade;target.lineWidth=3;target.beginPath();target.moveTo(side*8,0);target.quadraticCurveTo(side*12,clawY-4,clawX,clawY);target.stroke();target.fillStyle=skin.shade;target.beginPath();target.arc(clawX,clawY,4.2,0,Math.PI*2);target.fill();target.fillStyle=skin.belly;target.beginPath();target.arc(clawX,clawY,2.1,0,Math.PI*2);target.fill()}
-    target.strokeStyle=skin.shade;target.lineWidth=1.5;target.beginPath();target.moveTo(-7,-8);target.lineTo(-8,-14);target.moveTo(2,-8);target.lineTo(3,-14);target.stroke();target.fillStyle='#fff2ca';target.beginPath();target.arc(-8,-14,3,0,Math.PI*2);target.arc(3,-14,3,0,Math.PI*2);target.fill();target.fillStyle='#46304e';target.beginPath();target.arc(-8.5,-14,1.3,0,Math.PI*2);target.arc(2.5,-14,1.3,0,Math.PI*2);target.fill();
-    target.fillStyle='#fff1d7';target.beginPath();target.moveTo(-11,-9);target.lineTo(-5,-22);target.lineTo(1,-9);target.closePath();target.fill();target.fillStyle='#e74d78';target.beginPath();target.moveTo(-9,-12);target.lineTo(-5,-20);target.lineTo(-1,-12);target.closePath();target.fill();target.fillStyle='#efcc4f';target.beginPath();target.arc(-5,-21,1.8,0,Math.PI*2);target.fill();target.fillStyle='#73d8d1';target.fillRect(-10,-11,10,2);target.restore();return;
+    target.lineCap='round';target.lineJoin='round';
+    for(let i=0;i<4;i++)for(const side of [-1,1]){
+      const y=-2+i*3.5,step=moving?Math.sin(phase+i*Math.PI*.65+(side>0?Math.PI:0))*1.5:0;
+      const hip=side*7,knee=side*(12+step),foot=side*(18+step);
+      target.strokeStyle=skin.shade;target.lineWidth=2.1;target.beginPath();target.moveTo(hip,y);target.lineTo(knee,y+3);target.lineTo(foot,y+2);target.stroke();
+      target.fillStyle='#f1b081';target.beginPath();target.arc(knee,y+3,1,0,Math.PI*2);target.fill();
+    }
+    target.strokeStyle=skin.shade;target.lineWidth=3.5;target.beginPath();target.moveTo(-8,-1);target.quadraticCurveTo(-14,-5,-19,-7);target.moveTo(-8,4);target.quadraticCurveTo(-14,6,-18,7);target.stroke();
+    target.fillStyle=skin.shade;target.beginPath();target.ellipse(-20,-8,6,5,-.35,0,Math.PI*2);target.ellipse(-19,8,5.5,4.5,-.25,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.body;target.beginPath();target.moveTo(-18,-10);target.quadraticCurveTo(-23,-17,-29,-14);target.quadraticCurveTo(-30,-9,-22,-5);target.closePath();target.moveTo(-22,-3);target.quadraticCurveTo(-28,0,-29,5);target.quadraticCurveTo(-23,4,-18,1);target.closePath();target.fill();
+    target.strokeStyle=skin.shade;target.lineWidth=1;target.beginPath();target.moveTo(-18,-10);target.quadraticCurveTo(-23,-17,-29,-14);target.quadraticCurveTo(-30,-9,-22,-5);target.moveTo(-22,-3);target.quadraticCurveTo(-28,0,-29,5);target.quadraticCurveTo(-23,4,-18,1);target.stroke();
+    target.strokeStyle='#ffe0a6';target.lineWidth=1.1;target.beginPath();target.moveTo(-27,-13);target.quadraticCurveTo(-23,-10,-20,-8);target.moveTo(-27,4);target.quadraticCurveTo(-23,3,-20,1);target.stroke();
+    target.strokeStyle=skin.shade;target.lineWidth=1.6;target.beginPath();target.moveTo(-10,-4);target.quadraticCurveTo(-11,-9,-11,-11);target.moveTo(-5,-5);target.quadraticCurveTo(-5,-9,-5,-11);target.stroke();
+    target.fillStyle='#fff0d7';target.beginPath();target.arc(-11,-12,2.2,0,Math.PI*2);target.arc(-5,-12,2.2,0,Math.PI*2);target.fill();
+    target.fillStyle='#29233c';target.beginPath();target.arc(-11.5,-12,1,0,Math.PI*2);target.arc(-5.5,-12,1,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.shade;target.beginPath();target.moveTo(-1,-8);target.quadraticCurveTo(-12,-14,-16,-5);target.quadraticCurveTo(-18,2,-11,7);target.quadraticCurveTo(-2,11,9,7);target.quadraticCurveTo(17,4,18,-3);target.quadraticCurveTo(13,-10,4,-9);target.closePath();target.fill();
+    target.fillStyle=skin.body;target.beginPath();target.moveTo(-1,-8);target.quadraticCurveTo(-12,-13,-15,-5);target.quadraticCurveTo(-16,2,-10,6);target.quadraticCurveTo(-2,9,9,6);target.quadraticCurveTo(15,3,16,-3);target.quadraticCurveTo(12,-9,4,-8);target.closePath();target.fill();
+    target.strokeStyle='#ffd78a';target.lineWidth=.9;target.beginPath();target.moveTo(-8,-5);target.quadraticCurveTo(-1,-9,9,-6);target.moveTo(-7,0);target.quadraticCurveTo(0,-2,11,0);target.stroke();
+    target.strokeStyle=skin.shade;target.lineWidth=2;target.beginPath();target.moveTo(-10,-7);target.quadraticCurveTo(-11,-12,-11,-15);target.moveTo(-4,-7);target.quadraticCurveTo(-4,-13,-4,-15);target.stroke();
+    target.fillStyle='#fff0d7';target.beginPath();target.arc(-11,-16,2.4,0,Math.PI*2);target.arc(-4,-16,2.4,0,Math.PI*2);target.fill();
+    target.fillStyle='#29233c';target.beginPath();target.arc(-11.5,-16,1.1,0,Math.PI*2);target.arc(-4.5,-16,1.1,0,Math.PI*2);target.fill();
+    target.strokeStyle=skin.shade;target.lineWidth=2.6;target.beginPath();target.moveTo(-10,-1);target.quadraticCurveTo(-17,-4,-21,-7);target.moveTo(-10,4);target.quadraticCurveTo(-17,7,-21,8);target.stroke();
+    target.fillStyle=skin.shade;target.beginPath();target.ellipse(-25,-8,5.2,4.2,-.4,0,Math.PI*2);target.ellipse(-25,8,5.2,4.2,.35,0,Math.PI*2);target.fill();
+    target.fillStyle=skin.body;target.beginPath();target.moveTo(-22,-10);target.quadraticCurveTo(-28,-14,-31,-10);target.quadraticCurveTo(-29,-7,-24,-6);target.closePath();target.moveTo(-22,-5);target.quadraticCurveTo(-29,-3,-31,0);target.quadraticCurveTo(-29,3,-23,2);target.closePath();target.moveTo(-22,1);target.quadraticCurveTo(-28,5,-30,9);target.quadraticCurveTo(-26,11,-21,6);target.closePath();target.fill();
+    target.strokeStyle=skin.shade;target.lineWidth=1;target.beginPath();target.moveTo(-22,-10);target.quadraticCurveTo(-28,-14,-31,-10);target.quadraticCurveTo(-29,-7,-24,-6);target.moveTo(-22,-5);target.quadraticCurveTo(-29,-3,-31,0);target.quadraticCurveTo(-29,3,-23,2);target.moveTo(-22,1);target.quadraticCurveTo(-28,5,-30,9);target.quadraticCurveTo(-26,11,-21,6);target.stroke();
+    target.strokeStyle='#ffd78a';target.lineWidth=.8;target.beginPath();target.moveTo(-11,-5);target.quadraticCurveTo(-3,-9,7,-6);target.moveTo(-6,-3);target.quadraticCurveTo(-3,0,-4,4);target.moveTo(3,-4);target.quadraticCurveTo(5,0,4,5);target.stroke();
+    target.fillStyle=skin.belly;target.beginPath();target.moveTo(-8,4);target.quadraticCurveTo(-4,7,2,7);target.lineTo(0,9);target.quadraticCurveTo(-5,9,-9,6);target.closePath();target.fill();
+    target.strokeStyle='#f7d6a2';target.lineWidth=.8;target.beginPath();target.moveTo(9,-7);target.quadraticCurveTo(13,-1,10,4);target.stroke();
+    target.fillStyle='#fff0d7';target.beginPath();target.moveTo(9,-7);target.lineTo(13,-15);target.quadraticCurveTo(16,-16,18,-14);target.lineTo(16,-7);target.closePath();target.fill();
+    target.fillStyle='#e74d78';target.beginPath();target.moveTo(11,-8);target.lineTo(14,-14);target.lineTo(16,-8);target.closePath();target.fill();
+    target.fillStyle='#efcc4f';target.beginPath();target.arc(16,-15,1.4,0,Math.PI*2);target.fill();
+    target.strokeStyle='#73d8d1';target.lineWidth=.8;target.beginPath();target.moveTo(10,-7);target.lineTo(17,-7);target.stroke();
+    target.restore();return;
   }
   target.fillStyle=skin.shade;target.strokeStyle=skin.shade;target.lineWidth=3;
   for(let i=0;i<3;i++){const legY=3+i*4;target.beginPath();target.moveTo(5,legY);target.lineTo(14,legY+4);target.lineTo(17,legY+2);target.stroke()}
@@ -1309,60 +1397,91 @@ function drawAchievementCreature(target,x,y,skin,direction,scale,phase=0,moving=
 }
 function drawRatSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineCap='round';target.lineJoin='round';
-  target.strokeStyle=skin.shade;target.lineWidth=2.4;target.beginPath();target.moveTo(9,5);target.bezierCurveTo(18,1,21,16,29,8);target.stroke();
-  target.fillStyle=skin.shade;target.beginPath();target.ellipse(2,2,17,11,0,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.body;target.beginPath();target.ellipse(1,0,15,9.5,0,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.belly;target.beginPath();target.ellipse(4,5,8,4.5,-.1,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.body;target.beginPath();target.ellipse(-11,-5,9,8,0,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.ear;target.beginPath();target.arc(-8,-12,4.7,0,Math.PI*2);target.fill();
-  target.fillStyle='#f3c1b8';target.beginPath();target.arc(-8,-12,2.3,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.body;target.beginPath();target.arc(-18,-5,4.2,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.nose;target.beginPath();target.arc(-21,-5,2.1,0,Math.PI*2);target.fill();
-  target.fillStyle='#241b15';target.beginPath();target.arc(-13,-8,1.5,0,Math.PI*2);target.fill();
-  target.strokeStyle='#f3e3d0';target.lineWidth=.8;target.beginPath();target.moveTo(-19,-3);target.lineTo(-27,-1);target.moveTo(-19,-5);target.lineTo(-28,-6);target.stroke();
-  drawTrotFeet(target,[-5,8],12,phase,moving,skin.shade,1.7,3);
+  const step=moving?Math.sin(phase):0,oppositeStep=moving?Math.sin(phase+Math.PI):0;
+  const bellyShade=skin.belly;
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,15,19,3.2,0,0,Math.PI*2);target.fill();
+  target.strokeStyle=skin.shade;target.lineWidth=2.2;target.beginPath();target.moveTo(13,5);target.bezierCurveTo(22,4,25,14,31,8);target.stroke();
+  target.strokeStyle=skin.nose;target.lineWidth=1;target.beginPath();target.moveTo(14,5);target.bezierCurveTo(22,5,24,12,29,8);target.stroke();
+  const drawLeg=(legX,swing,front=false)=>{
+    target.strokeStyle=skin.shade;target.lineWidth=4.2;target.beginPath();target.moveTo(legX,5);target.quadraticCurveTo(legX+swing*.55,9,legX+swing,13);target.stroke();
+    target.strokeStyle=skin.body;target.lineWidth=2.4;target.beginPath();target.moveTo(legX,5);target.quadraticCurveTo(legX+swing*.55,9,legX+swing,12.5);target.stroke();
+    target.fillStyle=front?skin.belly:skin.shade;target.beginPath();target.ellipse(legX+swing-1,13,3.4,1.9,0,0,Math.PI*2);target.fill();
+    target.strokeStyle=skin.nose;target.lineWidth=.75;target.beginPath();target.moveTo(legX+swing-1,13);target.lineTo(legX+swing+.8,13);target.stroke();
+  };
+  drawLeg(-6,oppositeStep*2,false);drawLeg(9,step*2,false);
+  target.fillStyle=skin.shade;target.beginPath();target.ellipse(2,2,18,12,0,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.body;target.beginPath();target.ellipse(1,0,16,10.5,-.04,0,Math.PI*2);target.fill();
+  target.fillStyle=bellyShade;target.beginPath();target.ellipse(5,5.5,9,5.2,-.12,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff45';target.lineWidth=1.1;target.beginPath();target.ellipse(-1,-4,10,4.5,-.12,Math.PI*1.08,Math.PI*1.84);target.stroke();
+  drawLeg(-8,step*2.4,true);drawLeg(7,oppositeStep*2.4,true);
+  target.fillStyle=skin.shade;target.beginPath();target.ellipse(-11,-5,10,9,0,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.ear;target.beginPath();target.ellipse(-16,-13,5.1,6.2,-.35,0,Math.PI*2);target.fill();target.fillStyle='#f3c1b8';target.beginPath();target.ellipse(-16,-13,2.7,3.8,-.35,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.body;target.beginPath();target.ellipse(-11,-6,9.2,8.2,-.08,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff50';target.lineWidth=.9;target.beginPath();target.ellipse(-12,-9,4.8,2.1,-.2,Math.PI*1.05,Math.PI*1.85);target.stroke();
+  target.fillStyle=skin.ear;target.beginPath();target.ellipse(-7,-12,4.8,5.6,-.2,0,Math.PI*2);target.fill();target.fillStyle='#f3c1b8';target.beginPath();target.ellipse(-7,-12,2.4,3.3,-.2,0,Math.PI*2);target.fill();
+  target.fillStyle='#f1c8ae';target.beginPath();target.ellipse(-18,-3.5,5.8,3.8,-.15,0,Math.PI*2);target.fill();
+  target.fillStyle='#241b15';target.beginPath();target.ellipse(-13,-8,1.65,2,0,0,Math.PI*2);target.fill();target.fillStyle='#fff';target.beginPath();target.arc(-13.5,-8.8,.65,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.body;target.beginPath();target.ellipse(-20,-4,4,2.8,0,0,Math.PI*2);target.fill();target.fillStyle=skin.nose;target.beginPath();target.ellipse(-23,-4.2,2,1.5,-.15,0,Math.PI*2);target.fill();
+  target.strokeStyle='#f3e3d0';target.lineWidth=.65;target.beginPath();target.moveTo(-20,-3);target.quadraticCurveTo(-25,-1, -29,0);target.moveTo(-20,-4);target.quadraticCurveTo(-25,-4,-29,-4);target.moveTo(-20,-5);target.quadraticCurveTo(-25,-7,-28,-8);target.stroke();
   target.restore();
 }
 function drawPigeonSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=false){
-  target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';
-  target.fillStyle=skin.shade;target.beginPath();target.moveTo(13,2);target.lineTo(27,-3);target.lineTo(17,8);target.closePath();target.fill();
+  target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';target.lineCap='round';
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,14,17,2.6,0,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.shade;target.beginPath();target.moveTo(12,1);target.quadraticCurveTo(22,-4,28,-5);target.lineTo(20,3);target.lineTo(18,9);target.closePath();target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(2,2,16,11,-.12,0,Math.PI*2);target.fill();
+  target.strokeStyle=skin.shade;target.lineWidth=1.15;target.beginPath();target.ellipse(2,2,16,11,-.12,Math.PI*1.1,Math.PI*1.83);target.stroke();
   target.fillStyle=skin.belly;target.beginPath();target.ellipse(-1,5,9,6,-.2,0,Math.PI*2);target.fill();
-  target.fillStyle='#727983';target.beginPath();target.ellipse(4,0,10,7,-.35,0,Math.PI*2);target.fill();
+  // Layered wing feathers keep the pigeon broad-bodied rather than round like a ball.
+  target.fillStyle='#727983';target.beginPath();target.moveTo(-6,-4);target.quadraticCurveTo(0,-10,8,-6);target.quadraticCurveTo(13,-2,9,5);target.quadraticCurveTo(2,2,-5,5);target.closePath();target.fill();
+  target.strokeStyle='#aeb2b5';target.lineWidth=.85;
+  for(let i=0;i<3;i++){target.beginPath();target.moveTo(-3+i*3,-4);target.quadraticCurveTo(2+i*2,0,6+i,3);target.stroke()}
   target.fillStyle=skin.body;target.beginPath();target.ellipse(-7,-3,6,6,-.25,0,Math.PI*2);target.fill();
   const headSway=moving?Math.sin(phase)*.055:0;target.save();target.translate(-4,-2);target.rotate(headSway);target.translate(4,2);
-  target.fillStyle=skin.body;target.beginPath();target.arc(-10,-7,7.5,0,Math.PI*2);target.fill();
-  target.fillStyle=skin.nose;target.beginPath();target.moveTo(-16,-7);target.lineTo(-24,-5);target.lineTo(-16,-3);target.closePath();target.fill();
-  target.fillStyle='#222';target.beginPath();target.arc(-12,-9,1.4,0,Math.PI*2);target.fill();target.restore();
+  target.fillStyle=skin.shade;target.beginPath();target.arc(-10,-7,7.8,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.body;target.beginPath();target.arc(-10,-7.5,7.1,0,Math.PI*2);target.fill();
+  target.fillStyle=skin.nose;target.beginPath();target.moveTo(-16,-7);target.quadraticCurveTo(-20,-7,-24,-5);target.lineTo(-16,-3);target.closePath();target.fill();
+  target.fillStyle='#efbf70';target.beginPath();target.ellipse(-17,-5,2.4,1.8,0,0,Math.PI*2);target.fill();
+  target.fillStyle='#222';target.beginPath();target.arc(-12,-9,1.4,0,Math.PI*2);target.fill();target.fillStyle='#fff';target.beginPath();target.arc(-12.4,-9.5,.55,0,Math.PI*2);target.fill();target.restore();
   drawTrotFeet(target,[-4,5],16,phase,moving,skin.nose,2,2.2);
   target.restore();
 }
 function drawFrogSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';
+  target.fillStyle='#00000020';target.beginPath();target.ellipse(1,15,19,3,0,0,Math.PI*2);target.fill();
+  const frogStep=moving?Math.sin(phase)*2.5:0;
+  target.strokeStyle=skin.shade;target.lineWidth=4;target.lineCap='round';
+  target.beginPath();target.moveTo(7,7);target.quadraticCurveTo(15,8,19+frogStep,12);target.moveTo(-4,8);target.quadraticCurveTo(-12,10,-16-frogStep,13);target.stroke();
+  target.fillStyle=skin.shade;target.beginPath();target.ellipse(19+frogStep,13,5,2,0,0,Math.PI*2);target.ellipse(-16-frogStep,14,5,2,0,0,Math.PI*2);target.fill();
+  target.strokeStyle=skin.shade;target.lineWidth=1;target.beginPath();target.moveTo(16+frogStep,13);target.lineTo(15+frogStep,15);target.moveTo(20+frogStep,13);target.lineTo(20+frogStep,15);target.moveTo(-19-frogStep,14);target.lineTo(-20-frogStep,16);target.stroke();
   target.fillStyle=skin.shade;target.beginPath();target.ellipse(4,5,17,11,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(2,1,16,11,0,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff45';target.lineWidth=1;target.beginPath();target.ellipse(1,-2,10,5,-.1,Math.PI*1.1,Math.PI*1.8);target.stroke();
   target.fillStyle=skin.belly;target.beginPath();target.ellipse(-1,6,9,5,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(-8,-8,13,9,0,0,Math.PI*2);target.fill();
   for(const eyeX of [-16,-2]){
     target.fillStyle=skin.shade;target.beginPath();target.arc(eyeX,-15,5.5,0,Math.PI*2);target.fill();
     target.fillStyle='#fff4d4';target.beginPath();target.arc(eyeX,-15,4.3,0,Math.PI*2);target.fill();
     target.fillStyle='#24351f';target.beginPath();target.arc(eyeX-1,-15,2,0,Math.PI*2);target.fill();
+    target.fillStyle='#fff';target.beginPath();target.arc(eyeX-1.5,-16,.7,0,Math.PI*2);target.fill();
   }
-  target.strokeStyle='#365d2c';target.lineWidth=1.5;target.beginPath();target.moveTo(-20,-5);target.quadraticCurveTo(-12,-1,-4,-5);target.stroke();
-  const frogStep=moving?Math.sin(phase)*2.5:0;
-  target.fillStyle=skin.body;target.beginPath();target.ellipse(14+frogStep,8,7,5,-.3,0,Math.PI*2);target.ellipse(-8-frogStep,11,6,3,.2,0,Math.PI*2);target.fill();
+  target.strokeStyle=skin.shade;target.lineWidth=1.5;target.beginPath();target.moveTo(-20,-5);target.quadraticCurveTo(-12,-1,-4,-5);target.stroke();
+  target.fillStyle=skin.body;target.beginPath();target.ellipse(14,8,7,5,-.3,0,Math.PI*2);target.ellipse(-8,11,6,3,.2,0,Math.PI*2);target.fill();
   target.restore();
 }
 function drawRaccoonSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineJoin='round';
   target.fillStyle=skin.shade;target.beginPath();target.moveTo(10,0);target.bezierCurveTo(19,-5,24,10,31,4);target.bezierCurveTo(24,18,15,7,9,8);target.closePath();target.fill();
-  target.strokeStyle='#d6d0c3';target.lineWidth=3;for(const tx of [19,25]){target.beginPath();target.moveTo(tx,5);target.lineTo(tx+3,8);target.stroke()}
+  target.strokeStyle='#d6d0c3';target.lineWidth=3;for(const tx of [18,24]){target.beginPath();target.moveTo(tx,4);target.quadraticCurveTo(tx+2,7,tx+4,8);target.stroke()}
   target.fillStyle=skin.shade;target.beginPath();target.ellipse(2,2,16,11,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(1,0,14,9,0,0,Math.PI*2);target.fill();
+  target.strokeStyle='#ffffff45';target.lineWidth=1;target.beginPath();target.ellipse(0,-3,8,3,-.15,Math.PI*1.1,Math.PI*1.8);target.stroke();
   target.fillStyle=skin.belly;target.beginPath();target.ellipse(3,5,8,4,0,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.arc(-10,-6,8,0,Math.PI*2);target.fill();
   target.fillStyle=skin.shade;target.beginPath();target.moveTo(-17,-9);target.lineTo(-17,-17);target.lineTo(-9,-12);target.closePath();target.fill();
   target.beginPath();target.moveTo(-5,-12);target.lineTo(-2,-18);target.lineTo(1,-10);target.closePath();target.fill();
+  target.fillStyle='#d69a9a';target.beginPath();target.moveTo(-15,-11);target.lineTo(-15,-15);target.lineTo(-11,-12);target.closePath();target.fill();
+  target.beginPath();target.moveTo(-4,-12);target.lineTo(-2,-16);target.lineTo(-1,-11);target.closePath();target.fill();
   target.fillStyle='#dedbd0';target.beginPath();target.ellipse(-13,-6,7,4,0,0,Math.PI*2);target.fill();
   target.fillStyle='#282724';target.beginPath();target.ellipse(-13,-8,6,2.7,0,0,Math.PI*2);target.fill();
   target.fillStyle='#f5ead5';target.beginPath();target.arc(-13,-8,1.4,0,Math.PI*2);target.fill();
@@ -1373,16 +1492,19 @@ function drawRaccoonSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=f
 function drawFlamingoSprite(target,x,y,skin,direction=-1,scale=1,phase=0,moving=false){
   target.save();target.translate(x,y);target.scale(direction*scale,scale);target.lineCap='round';target.lineJoin='round';
   const flamingoStep=moving?Math.sin(phase)*2.5:0;
-  target.strokeStyle=skin.shade;target.lineWidth=3;target.beginPath();target.moveTo(-4,2);target.lineTo(-6+flamingoStep,19);target.moveTo(6,2);target.lineTo(8-flamingoStep,18);target.stroke();
+  target.strokeStyle=skin.shade;target.lineWidth=3.2;target.beginPath();target.moveTo(-4,2);target.lineTo(-4,8);target.lineTo(-6+flamingoStep,19);target.moveTo(6,2);target.lineTo(6,8);target.lineTo(8-flamingoStep,18);target.stroke();
   target.strokeStyle=skin.nose;target.lineWidth=2;target.beginPath();target.moveTo(-8+flamingoStep,19);target.lineTo(-14+flamingoStep,19);target.moveTo(6-flamingoStep,18);target.lineTo(13-flamingoStep,18);target.stroke();
+  target.strokeStyle='#f7d2a8';target.lineWidth=1;target.beginPath();target.moveTo(-5,4);target.lineTo(-5,8);target.moveTo(5,4);target.lineTo(5,8);target.stroke();
   target.fillStyle=skin.shade;target.beginPath();target.ellipse(3,-7,15,9,-.2,0,Math.PI*2);target.fill();
   target.fillStyle=skin.body;target.beginPath();target.ellipse(2,-9,13,7,-.2,0,Math.PI*2);target.fill();
   target.fillStyle=skin.belly;target.beginPath();target.ellipse(-1,-6,7,4,-.3,0,Math.PI*2);target.fill();
+  target.strokeStyle='#fff0e4';target.lineWidth=1;target.beginPath();target.ellipse(1,-12,8,2,-.2,Math.PI*1.1,Math.PI*1.8);target.stroke();
   const neckSway=moving?Math.sin(phase)*.05:0;target.save();target.translate(-4,-14);target.rotate(neckSway);target.translate(4,14);
   target.strokeStyle=skin.body;target.lineWidth=5;target.beginPath();target.moveTo(-4,-14);target.bezierCurveTo(-7,-23,-2,-29,-11,-31);target.bezierCurveTo(-17,-33,-17,-39,-15,-42);target.stroke();
   target.fillStyle=skin.body;target.beginPath();target.arc(-15,-41,6,0,Math.PI*2);target.fill();
   target.fillStyle=skin.nose;target.beginPath();target.moveTo(-19,-41);target.lineTo(-29,-38);target.lineTo(-20,-36);target.closePath();target.fill();
-  target.fillStyle='#241b15';target.beginPath();target.arc(-16,-43,1.3,0,Math.PI*2);target.fill();target.restore();
+  target.fillStyle='#24201f';target.beginPath();target.moveTo(-20,-38);target.lineTo(-29,-38);target.lineTo(-20,-37);target.closePath();target.fill();
+  target.fillStyle='#241b15';target.beginPath();target.arc(-16,-43,1.3,0,Math.PI*2);target.fill();target.fillStyle='#fff';target.beginPath();target.arc(-16.4,-43.5,.5,0,Math.PI*2);target.fill();target.restore();
   target.restore();
 }
 function drawLivingFurniture(o){
