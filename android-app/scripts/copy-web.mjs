@@ -1,0 +1,15 @@
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const here = path.dirname(fileURLToPath(import.meta.url));
+const app = path.resolve(here, '..');
+const source = path.resolve(app, '..', 'spiele');
+const out = path.join(app, 'www');
+await mkdir(path.join(out, 'css'), { recursive: true });
+await mkdir(path.join(out, 'js'), { recursive: true });
+await cp(path.join(source, 'css', 'style.css'), path.join(out, 'css', 'style.css'));
+await cp(path.join(source, 'js', 'game.js'), path.join(out, 'js', 'game.js'));
+let html = await readFile(path.join(source, 'RatKing.html'), 'utf8');
+html = html.replace(/<title>[^<]*<\/title>/, '<title>RatKing</title>');
+await writeFile(path.join(out, 'index.html'), html);
+console.log('RatKing assets copied into Android project');
