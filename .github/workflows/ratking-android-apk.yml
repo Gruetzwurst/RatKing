@@ -66,11 +66,15 @@ jobs:
           npm run build
           npx cap add android
           npx cap sync android
+      - uses: actions/setup-python@v5
+        if: ${{ hashFiles('android-app/icon/nibblecrown.png') != '' }}
+        with:
+          python-version: '3.12'
       - name: Apply Nibblecrown app icon
         if: ${{ hashFiles('android-app/icon/nibblecrown.png') != '' }}
         run: |
-          python3 -m pip install --quiet --user Pillow
-          python3 scripts/create_icons.py
+          python -m pip install --quiet Pillow
+          python scripts/create_icons.py
       - name: Decode private signing key securely
         shell: bash
         run: |
