@@ -1,5 +1,8 @@
 # Nibblecrown – Google-Play-Store-Texte (de-DE)
 
+## Öffentlicher Entwicklername
+GruetzwurstGames
+
 ## App-Name
 Nibblecrown
 
