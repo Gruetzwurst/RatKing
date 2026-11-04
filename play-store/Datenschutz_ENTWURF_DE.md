@@ -4,7 +4,7 @@
 
 ## Verantwortlich
 [Name bzw. Entwicklerbezeichnung, passend zur Google Play Console]
-[Erreichbare E-Mail-Adresse für Datenschutzanfragen]
+gruetzwurst.games@gmail.com
 
 ## Welche Daten verwendet die App?
 Nibblecrown ist ein Einzelspieler-Spiel ohne Nutzerkonto.
@@ -22,7 +22,7 @@ Lokale Daten bleiben grundsätzlich auf dem Gerät, bis sie durch App- oder Syst
 [Vor Veröffentlichung anhand des fertigen Android App Bundles und aller Bibliotheken überprüfen; erst dann verbindlich formulieren.]
 
 ## Kontakt
-Bei Fragen zum Datenschutz: [E-Mail-Adresse]
+Bei Fragen zum Datenschutz: gruetzwurst.games@gmail.com
 
 ## Stand
 [Datum der Freigabe]
