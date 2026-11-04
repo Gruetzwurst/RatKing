@@ -35,13 +35,13 @@ for file in ("ic_launcher.xml", "ic_launcher_round.xml"):
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text('''<?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_launcher_background"/>
+    <background android:drawable="@color/nibblecrown_background"/>
     <foreground android:drawable="@drawable/ic_launcher_foreground"/>
 </adaptive-icon>
 ''', encoding="utf-8")
 background = res / "values" / "nibblecrown_icon_colors.xml"
 background.parent.mkdir(parents=True, exist_ok=True)
 background.write_text('''<?xml version="1.0" encoding="utf-8"?>
-<resources><color name="ic_launcher_background">#F5E4C8</color></resources>
+<resources><color name="nibblecrown_background">#F5E4C8</color></resources>
 ''', encoding="utf-8")
 print("Nibblecrown launcher icons prepared.")
