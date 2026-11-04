@@ -129,3 +129,8 @@ button{border:0;border-radius:16px;padding:15px 24px;font-size:18px;font-weight:
 .achievementRowTop small{margin-top:3px;color:#c7b8a3}
 .achievementStatus{margin-top:8px;color:#f0cf82;font-size:12px;font-weight:800}
 #achievementResult{border-color:#d8a33e}
+
+/* Save backup controls */
+.saveBackup{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.saveBackup button{min-width:0;padding:10px 5px;font-size:11px;line-height:1.3;margin:0;background:#75604a;color:#fff4de;box-shadow:0 3px 0 #493b2c}
+.saveBackup #backupStatus{grid-column:1/-1;margin:0;text-align:center}
