@@ -2,7 +2,7 @@
   "name": "ratking-android",
   "version": "0.10.14",
   "private": true,
-  "description": "RatKing Android wrapper using Capacitor",
+  "description": "Nibblecrown Android wrapper using Capacitor",
   "scripts": {
     "build": "node scripts/copy-web.mjs",
     "android:init": "npm run build && npx cap add android",
