@@ -11,6 +11,6 @@ await cp(path.join(source, 'css', 'style.css'), path.join(out, 'css', 'style.css
 await cp(path.join(source, 'js', 'game.js'), path.join(out, 'js', 'game.js'));
 await cp(path.join(source, 'js', 'save-backup.js'), path.join(out, 'js', 'save-backup.js'));
 let html = await readFile(path.join(source, 'RatKing.html'), 'utf8');
-html = html.replace(/<title>[^<]*<\/title>/, '<title>RatKing</title>');
+html = html.replace(/<title>[^<]*<\/title>/, '<title>Nibblecrown</title>');
 await writeFile(path.join(out, 'index.html'), html);
 console.log('RatKing assets copied into Android project');
