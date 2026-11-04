@@ -47,7 +47,7 @@ jobs:
         working-directory: android-app
     env:
       RATKING_KEYSTORE_PASSWORD: ${{ secrets.RATKING_KEYSTORE_PASSWORD }}
-      RATKING_KEY_ALIAS: ${{ secrets.RATKING_KEY_ALIAS }}
+      RATKING_KEY_ALIAS: ratking
       RATKING_KEYSTORE_BASE64: ${{ secrets.RATKING_KEYSTORE_BASE64 }}
     steps:
       - uses: actions/checkout@v4
