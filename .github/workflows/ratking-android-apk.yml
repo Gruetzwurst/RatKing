@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,19 +22,82 @@ jobs:
       - uses: android-actions/setup-android@v4
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Create Android project with current game
+      - name: Create Android project with current RatKing game
         run: |
           npm run build
           npx cap add android
           npx cap sync android
-      - name: Build test APK
+      - name: Build debug APK (temporary; do not distribute to long-term testers)
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
-          name: RatKing-Android-Test-APK
+          name: RatKing-Debug-Nur-zum-Testen
           path: android-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 7
+
+  signed-release:
+    name: Stable signed tester APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-app
+    env:
+      RATKING_KEYSTORE_PASSWORD: ${{ secrets.RATKING_KEYSTORE_PASSWORD }}
+      RATKING_KEY_ALIAS: ${{ secrets.RATKING_KEY_ALIAS }}
+      RATKING_KEYSTORE_BASE64: ${{ secrets.RATKING_KEYSTORE_BASE64 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v4
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Prepare offline Android project
+        run: |
+          npm run build
+          npx cap add android
+          npx cap sync android
+      - name: Decode private signing key securely
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$RATKING_KEYSTORE_BASE64" || -z "$RATKING_KEYSTORE_PASSWORD" || -z "$RATKING_KEY_ALIAS" ]]; then
+            echo "::error::Signing secrets are missing. Add RATKING_KEYSTORE_BASE64, RATKING_KEYSTORE_PASSWORD, and RATKING_KEY_ALIAS."
+            exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/ratking-keys"
+          chmod 700 "$RUNNER_TEMP/ratking-keys"
+          printf '%s' "$RATKING_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/ratking-keys/release.jks"
+          chmod 600 "$RUNNER_TEMP/ratking-keys/release.jks"
+          echo "RATKING_KEYSTORE_PATH=$RUNNER_TEMP/ratking-keys/release.jks" >> "$GITHUB_ENV"
+      - name: Configure release signing
+        run: node scripts/configure-signing.mjs
+      - name: Build signed release APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+      - name: Confirm APK is signed
+        shell: bash
+        run: |
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose android/app/build/outputs/apk/release/app-release.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RatKing-Signierte-Test-APK
+          path: android-app/android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 30
+      - name: Remove temporary signing key
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/ratking-keys/release.jks"
